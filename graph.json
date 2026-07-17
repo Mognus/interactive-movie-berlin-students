@@ -1,0 +1,74 @@
+{
+  "comment": "Story graph transcribed from resources/a-crime-noone-saw-coming-BeatBoard.pdf. Best-effort - verify against the BeatBoard! Edge order = priority (first match wins), '*' = ALLE.",
+  "start": "intro",
+  "attributes": {
+    "ort": ["wald", "verlassenes-haus", "gertrudenlinde"],
+    "zeit": ["morgens", "abends"],
+    "mordwaffe": ["schlag", "cyanid", "insulin"],
+    "motiv": ["geld", "eifersucht", "rache"]
+  },
+  "nodes": {
+    "intro": { "type": "clip", "src": "clips/intro.mp4" },
+    "board": {
+      "type": "board",
+      "firstVisitAuto": ["wald", "abends", "schlag", "eifersucht"]
+    },
+    "OS_1_2_A_3": { "type": "clip", "src": "clips/OS_1_2_A_3.mp4", "label": "Info zu dem Motiv" },
+    "OS_1_2_A_12": { "type": "clip", "src": "clips/OS_1_2_A_12.mp4", "label": "Falsches Motiv" },
+    "OS_1_1_A_A": { "type": "clip", "src": "clips/OS_1_1_A_A.mp4", "label": "DEAD END Wald Tag" },
+    "OS_2_2_1_A": { "type": "clip", "src": "clips/OS_2_2_1_A.mp4", "label": "Info Richtung Sage, falsch" },
+    "OS_2_2_23_A": { "type": "clip", "src": "clips/OS_2_2_23_A.mp4", "label": "DEAD END Haus" },
+    "OS_2_1_23_12": { "type": "clip", "src": "clips/OS_2_1_23_12.mp4", "label": "DEAD END Haus" },
+    "OS_2_1_2_3": { "type": "clip", "src": "clips/OS_2_1_2_3.mp4", "label": "DEAD END Haus" },
+    "OS_2_1_3_3": { "type": "clip", "src": "clips/OS_2_1_3_3.mp4", "label": "Finales Ende" },
+    "OS_2_1_1_A": { "type": "clip", "src": "clips/OS_2_1_1_A.mp4", "label": "Info Richtung Detektiv, verdaechtig" },
+    "OS_3_1_A_A": { "type": "clip", "src": "clips/OS_3_1_A_A.mp4", "label": "DEAD END Lindenbaum" },
+    "OS_3_2_1_3": { "type": "clip", "src": "clips/OS_3_2_1_3.mp4", "label": "Info Richtung Standort" },
+    "OS_3_2_1_A": { "type": "clip", "src": "clips/OS_3_2_1_A.mp4", "label": "DEAD END Lindenbaum" },
+    "OS_3_2_3_3": { "type": "clip", "src": "clips/OS_3_2_3_3.mp4", "label": "Info Richtung Mordwaffe" },
+    "OS_3_2_3_2": { "type": "clip", "src": "clips/OS_3_2_3_2.mp4", "label": "Info Richtung Motiv, Sage behaftet" },
+    "OS_3_2_3_1": { "type": "clip", "src": "clips/OS_3_2_3_1.mp4", "label": "DEAD END Lindenbaum" },
+    "OS_3_2_2_A": { "type": "clip", "src": "clips/OS_3_2_2_A.mp4", "label": "Info Richtung Mordwaffe, Sage behaftet" },
+    "credits": { "type": "end" }
+  },
+  "edges": [
+    { "from": "intro", "to": "board" },
+
+    { "from": "board", "when": ["wald", "abends", "*", "rache"], "to": "OS_1_2_A_3" },
+    { "from": "board", "when": ["wald", "abends", "*", "*"], "to": "OS_1_2_A_12" },
+    { "from": "board", "when": ["wald", "morgens", "*", "*"], "to": "OS_1_1_A_A" },
+
+    { "from": "board", "when": ["verlassenes-haus", "abends", "schlag", "*"], "to": "OS_2_2_1_A" },
+    { "from": "board", "when": ["verlassenes-haus", "abends", "*", "*"], "to": "OS_2_2_23_A" },
+    { "from": "board", "when": ["verlassenes-haus", "morgens", "insulin", "rache"], "to": "OS_2_1_3_3" },
+    { "from": "board", "when": ["verlassenes-haus", "morgens", "cyanid", "rache"], "to": "OS_2_1_2_3" },
+    { "from": "board", "when": ["verlassenes-haus", "morgens", "schlag", "*"], "to": "OS_2_1_1_A" },
+    { "from": "board", "when": ["verlassenes-haus", "morgens", "*", "*"], "to": "OS_2_1_23_12" },
+
+    { "from": "board", "when": ["gertrudenlinde", "morgens", "*", "*"], "to": "OS_3_1_A_A" },
+    { "from": "board", "when": ["gertrudenlinde", "abends", "schlag", "rache"], "to": "OS_3_2_1_3" },
+    { "from": "board", "when": ["gertrudenlinde", "abends", "schlag", "*"], "to": "OS_3_2_1_A" },
+    { "from": "board", "when": ["gertrudenlinde", "abends", "insulin", "rache"], "to": "OS_3_2_3_3" },
+    { "from": "board", "when": ["gertrudenlinde", "abends", "insulin", "eifersucht"], "to": "OS_3_2_3_2" },
+    { "from": "board", "when": ["gertrudenlinde", "abends", "insulin", "geld"], "to": "OS_3_2_3_1" },
+    { "from": "board", "when": ["gertrudenlinde", "abends", "cyanid", "*"], "to": "OS_3_2_2_A" },
+
+    { "from": "OS_1_2_A_3", "to": "board" },
+    { "from": "OS_1_2_A_12", "to": "board" },
+    { "from": "OS_1_1_A_A", "to": "board" },
+    { "from": "OS_2_2_1_A", "to": "board" },
+    { "from": "OS_2_2_23_A", "to": "board" },
+    { "from": "OS_2_1_23_12", "to": "board" },
+    { "from": "OS_2_1_2_3", "to": "board" },
+    { "from": "OS_2_1_1_A", "to": "board" },
+    { "from": "OS_3_1_A_A", "to": "board" },
+    { "from": "OS_3_2_1_3", "to": "board" },
+    { "from": "OS_3_2_1_A", "to": "board" },
+    { "from": "OS_3_2_3_3", "to": "board" },
+    { "from": "OS_3_2_3_2", "to": "board" },
+    { "from": "OS_3_2_3_1", "to": "board" },
+    { "from": "OS_3_2_2_A", "to": "board" },
+
+    { "from": "OS_2_1_3_3", "to": "credits" }
+  ]
+}

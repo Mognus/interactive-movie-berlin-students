@@ -1,0 +1,5 @@
+# generated placeholder videos - recreate with scripts/generate-clips.sh
+clips/
+
+node_modules/
+dist/
