@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Generates placeholder videos from clips-manifest.txt into clips/.
+# Generates placeholder videos from clips-manifest.txt into frontend/public/clips/.
 # Color-coded by outcome type, with the clip ID + a running timer burned in,
 # so you can instantly see which clip the engine picked while testing.
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
-mkdir -p clips
+mkdir -p frontend/public/clips
 
 DURATION=5
 
@@ -22,7 +22,7 @@ color_for() {
 
 grep -v '^#' scripts/clips-manifest.txt | while IFS='|' read -r id type label; do
   [ -z "$id" ] && continue
-  out="clips/${id}.mp4"
+  out="frontend/public/clips/${id}.mp4"
   # silent audio track included so the <video> element behaves like the real clips
   ffmpeg -y -loglevel error \
     -f lavfi -i "color=c=$(color_for "$type"):s=1280x720:d=${DURATION}" \
@@ -34,4 +34,4 @@ grep -v '^#' scripts/clips-manifest.txt | while IFS='|' read -r id type label; d
   echo "  $out ($type)"
 done
 
-echo "Done: $(ls clips/*.mp4 | wc -l) clips in clips/"
+echo "Done: $(ls frontend/public/clips/*.mp4 | wc -l) clips in frontend/public/clips/"
