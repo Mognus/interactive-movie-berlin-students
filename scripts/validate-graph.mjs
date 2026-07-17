@@ -2,7 +2,7 @@
 // every edge must reference existing nodes, every clip node must be reachable.
 import { readFileSync } from "node:fs";
 
-const graph = JSON.parse(readFileSync(new URL("../graph.json", import.meta.url)));
+const graph = JSON.parse(readFileSync(new URL("../frontend/src/engine/graph.json", import.meta.url)));
 const { attributes, nodes, edges } = graph;
 
 let errors = 0;
