@@ -33,6 +33,21 @@ cd frontend && corepack enable && pnpm install && pnpm dev
 Ports and the container name prefix can be overridden through a `.env` file, see
 [`.env.example`](.env.example).
 
+## Test paths
+
+The board opens with a scripted selection that plays by itself. Afterwards, these
+three combinations cover the outcomes worth checking. The labels are the ones
+printed on the notes:
+
+| Place | Time | Weapon | Motive | Outcome |
+| --- | --- | --- | --- | --- |
+| Haus des Opfers | morgens | Insulin | Rache | Solution: `Finales Ende`, then the end screen |
+| Wald | morgens | any | any | Dead end: `DEAD END Wald Tag`, back to the board |
+| Gertruden-Linde | abends | Schlag auf den Kopf | Rache | Clue: `Info Richtung Standort`, back to the board |
+
+The third one also proves that edge order is respected: the rule directly below it
+matches the same three values with any motive and leads to a dead end instead.
+
 ## Features
 
 - Full-screen video playback

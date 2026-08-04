@@ -35,6 +35,48 @@
   z-index: 1;
   pointer-events: none;
   overflow: visible;
+  /* the shadow is what makes it read as string lying on the board, not a drawn line */
+  filter: drop-shadow(0 0.25cqw 0.25cqw rgba(40, 22, 6, 0.55));
+}
+
+/* red-and-white baker's twine: a light strand with red stripes dashed over it */
+.twine-base,
+.twine-stripe {
+  fill: none;
+  stroke-width: 10;
+}
+
+.twine-base {
+  stroke: #f4efe4;
+  stroke-linecap: round;
+  /* pairs with pathLength={1}: one dash covers the whole path, so shifting the
+     offset from 1 to 0 draws it on */
+  stroke-dasharray: 1;
+  animation: twine-draw 260ms ease-out both;
+}
+
+.twine-stripe {
+  stroke: #b3282d;
+  stroke-dasharray: 16 16;
+  animation: twine-fade 180ms 180ms ease-out both;
+}
+
+@keyframes twine-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes twine-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Category wrapper: carries the group semantics without affecting layout.
@@ -150,5 +192,10 @@
 @media (prefers-reduced-motion: reduce) {
   .zettel {
     transition: none;
+  }
+
+  .twine-base,
+  .twine-stripe {
+    animation: none;
   }
 }

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { ATTRIBUTE_KEYS, type AttributeKey, type Selection } from "../engine/types";
 import { Zettel, ZettelStatic } from "./board/Zettel";
-import { HEADERS, NOTES, SOLVE_NOTE, STRING_ORDER, spotStyle } from "./board/positions";
+import { Twine } from "./board/Twine";
+import { anchorOf, HEADERS, NOTES, SOLVE_NOTE, STRING_ORDER, spotStyle } from "./board/positions";
 import "./board/board.css";
 
 const GROUP_LABELS: Record<AttributeKey, string> = {
@@ -56,12 +57,23 @@ export function Board({ attributes, auto, onSubmit }: BoardProps) {
         if (!NOTES[value]) console.warn(`board: no position for attribute "${value}"`);
   }, [attributes]);
 
+  // pin coordinates of the chosen notes, in board order so the twine sweeps
+  // left to right across the columns
+  const points = STRING_ORDER.flatMap((key) => {
+    const value = sel[key];
+    if (!value) return [];
+    const note = NOTES[value];
+    return note ? [{ key: value, ...anchorOf(note) }] : [];
+  });
+
   return (
     <div className="board-screen">
       <div className="board-stage" aria-busy={!!auto}>
         {HEADERS.map((header) => (
           <ZettelStatic key={header.label} note={header} />
         ))}
+
+        <Twine points={points} />
 
         {/* rendered in STRING_ORDER so tab order runs left to right across the board */}
         {STRING_ORDER.map((key) => (
