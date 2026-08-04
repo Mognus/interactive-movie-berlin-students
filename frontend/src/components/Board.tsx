@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ATTRIBUTE_KEYS, type AttributeKey, type Selection } from "../engine/types";
 import { Zettel, ZettelStatic } from "./board/Zettel";
 import { Twine } from "./board/Twine";
-import { anchorOf, HEADERS, NOTES, SOLVE_NOTE, STRING_ORDER, spotStyle } from "./board/positions";
+import { anchorOf, HEADERS, NOTES, SOLVE_NOTE, spotStyle } from "./board/positions";
 import "./board/board.css";
 
 const GROUP_LABELS: Record<AttributeKey, string> = {
@@ -42,7 +42,7 @@ export function Board({ attributes, auto, onSubmit }: BoardProps) {
       ATTRIBUTE_KEYS.map((key, i) => [key, auto[i]])
     ) as Selection;
 
-    const timers = STRING_ORDER.map((key, i) =>
+    const timers = ATTRIBUTE_KEYS.map((key, i) =>
       setTimeout(() => setSel((s) => ({ ...s, [key]: autoSel[key] })), AUTO_PICK_MS[i])
     );
     timers.push(setTimeout(() => submitRef.current(autoSel), AUTO_SUBMIT_MS));
@@ -59,7 +59,7 @@ export function Board({ attributes, auto, onSubmit }: BoardProps) {
 
   // pin coordinates of the chosen notes, in board order so the twine sweeps
   // left to right across the columns
-  const points = STRING_ORDER.flatMap((key) => {
+  const points = ATTRIBUTE_KEYS.flatMap((key) => {
     const value = sel[key];
     if (!value) return [];
     const note = NOTES[value];
@@ -75,8 +75,8 @@ export function Board({ attributes, auto, onSubmit }: BoardProps) {
 
         <Twine points={points} />
 
-        {/* rendered in STRING_ORDER so tab order runs left to right across the board */}
-        {STRING_ORDER.map((key) => (
+        {/* rendered in ATTRIBUTE_KEYS so tab order runs left to right across the board */}
+        {ATTRIBUTE_KEYS.map((key) => (
           <div key={key} className="board-group" role="group" aria-label={GROUP_LABELS[key]}>
             {attributes[key].map((value) =>
               NOTES[value] ? (

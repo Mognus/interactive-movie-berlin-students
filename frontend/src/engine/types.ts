@@ -1,6 +1,9 @@
 // Shapes for graph.json - the story graph transcribed from the BeatBoard.
 
-export const ATTRIBUTE_KEYS = ["ort", "zeit", "mordwaffe", "motiv"] as const;
+// Order matters twice over: it is the slot order of the "when" patterns in
+// graph.json, and it is the board's column order from left to right, which the
+// twine and the tab order follow.
+export const ATTRIBUTE_KEYS = ["zeit", "motiv", "ort", "mordwaffe"] as const;
 export type AttributeKey = (typeof ATTRIBUTE_KEYS)[number];
 
 // one value per attribute, e.g. { ort: "wald", zeit: "abends", ... }

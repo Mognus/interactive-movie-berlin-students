@@ -22,17 +22,20 @@ const resolve = (combo) =>
       e.when.every((m, i) => m === "*" || m === combo[i])
   );
 
-// exhaustively try all combinations (3*2*3*3 = 54)
+// Cartesian product of all attributes (2*3*3*3 = 54). Slot order follows the key
+// order of "attributes", the same order ATTRIBUTE_KEYS declares - deriving it here
+// instead of hardcoding it keeps the check honest if that order ever changes.
+const combos = Object.values(attributes).reduce(
+  (acc, values) => acc.flatMap((combo) => values.map((value) => [...combo, value])),
+  [[]]
+);
+
 const hits = new Map();
-for (const ort of attributes.ort)
-  for (const zeit of attributes.zeit)
-    for (const mordwaffe of attributes.mordwaffe)
-      for (const motiv of attributes.motiv) {
-        const combo = [ort, zeit, mordwaffe, motiv];
-        const edge = resolve(combo);
-        if (!edge) fail(`no edge matches [${combo.join(", ")}]`);
-        else hits.set(edge.to, (hits.get(edge.to) ?? 0) + 1);
-      }
+for (const combo of combos) {
+  const edge = resolve(combo);
+  if (!edge) fail(`no edge matches [${combo.join(", ")}]`);
+  else hits.set(edge.to, (hits.get(edge.to) ?? 0) + 1);
+}
 
 // every clip should be reachable from the board
 for (const [id, node] of Object.entries(nodes)) {

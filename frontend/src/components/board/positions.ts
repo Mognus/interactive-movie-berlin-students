@@ -5,8 +5,6 @@
 // read straight off the photo. Notes position themselves as a percentage of these
 // numbers and the twine SVG uses them as its viewBox units, which is what keeps the
 // string glued to the pins at every window size without measuring anything.
-import type { AttributeKey } from "../../engine/types";
-
 export const BOARD_W = 1600;
 export const BOARD_H = 1200;
 
@@ -57,11 +55,6 @@ export const SOLVE_NOTE: NoteLayout = {
   pin: "#d33a5c",
   label: "Fall lösen",
 };
-
-// Order in which the twine connects the chosen notes: spatially left to right.
-// Deliberately NOT ATTRIBUTE_KEYS order - that would run column 3 -> 1 -> 4 -> 2
-// and scribble across the board.
-export const STRING_ORDER: readonly AttributeKey[] = ["zeit", "motiv", "ort", "mordwaffe"];
 
 // The twine hangs from the pin, not from the middle of the note.
 export const anchorOf = (n: NoteLayout) => ({ x: n.x, y: n.y - NOTE_H * 0.35 });
