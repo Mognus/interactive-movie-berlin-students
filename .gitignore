@@ -3,3 +3,4 @@ frontend/public/clips/
 
 node_modules/
 dist/
+.env

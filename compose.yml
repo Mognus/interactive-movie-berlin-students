@@ -1,0 +1,16 @@
+# Production stack. Run with: docker compose up -d --build
+#
+# Explicit project name: without it Compose derives one from the directory, and
+# both stacks would share it — starting dev would then replace the running
+# prod containers instead of standing up a separate stack.
+name: interactive-movie
+
+services:
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ${PROJECT_NAME:-interactive-movie}-web
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    restart: always

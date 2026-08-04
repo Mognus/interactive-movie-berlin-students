@@ -7,6 +7,32 @@ branch in the story graph and plays the corresponding video clip.
 The project was created as a student project in Berlin and is currently built
 with React, TypeScript, and Vite.
 
+## Quick start
+
+The placeholder clips are not in the repository, so generate them once (requires
+FFmpeg):
+
+```bash
+./scripts/generate-clips.sh
+```
+
+Then start one of the stacks:
+
+```bash
+docker compose -f compose.dev.yml up          # dev, hot reload -> http://localhost:5173
+docker compose up -d --build                  # production      -> http://localhost:8080
+docker compose -f compose.dev.yml down        # stop (or: docker compose down)
+```
+
+Without Docker:
+
+```bash
+cd frontend && corepack enable && pnpm install && pnpm dev
+```
+
+Ports and the container name prefix can be overridden through a `.env` file, see
+[`.env.example`](.env.example).
+
 ## Features
 
 - Full-screen video playback
@@ -15,33 +41,6 @@ with React, TypeScript, and Vite.
 - Automatic first selection to introduce the interaction
 - Exhaustive validation of all 54 clue combinations
 - Docker-based development and production environments
-
-## Run with Docker
-
-Start the development server with hot module replacement:
-
-```bash
-docker compose up dev
-```
-
-Open <http://localhost:5173>.
-
-Build and serve the production version:
-
-```bash
-docker compose up --build prod
-```
-
-Open <http://localhost:8080>.
-
-## Run locally
-
-```bash
-cd frontend
-corepack enable
-pnpm install
-pnpm dev
-```
 
 ## Story graph
 
@@ -64,17 +63,11 @@ node scripts/validate-graph.mjs
 
 ## Placeholder clips
 
-The repository contains generated placeholder videos for testing the complete
-interaction without the final film material. Their definitions live in
-[`scripts/clips-manifest.txt`](scripts/clips-manifest.txt).
-
-To regenerate them, install FFmpeg and run:
-
-```bash
-./scripts/generate-clips.sh
-```
-
-The generated files are written to `frontend/public/clips/`.
+The generated placeholder videos stand in for the final film material and are
+color-coded by outcome, with the clip ID burned into the picture. Their
+definitions live in
+[`scripts/clips-manifest.txt`](scripts/clips-manifest.txt); the generated files
+are written to `frontend/public/clips/` and are excluded from version control.
 
 ## Project structure
 
@@ -82,10 +75,14 @@ The generated files are written to `frontend/public/clips/`.
 .
 ├── frontend/
 │   ├── public/clips/       # Video clips
-│   └── src/
-│       ├── components/     # Player and investigation board
-│       └── engine/         # Story graph, types, and traversal logic
-├── resources/              # Storyboard and project documents
+│   ├── src/
+│   │   ├── components/     # Player and investigation board
+│   │   │   └── board/      # Board layout, notes, and connecting string
+│   │   └── engine/         # Story graph, types, and traversal logic
+│   ├── Dockerfile          # Production image, nginx serving the static build
+│   └── Dockerfile.dev      # Development image, Vite with hot reload
+├── resources/              # Storyboard, screenplay, and board reference photos
 ├── scripts/                # Graph validation and clip generation
-└── compose.yaml
+├── compose.yml             # Production stack
+└── compose.dev.yml         # Development stack
 ```

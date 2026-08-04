@@ -1,22 +1,25 @@
-# Shared base: node + dependencies (cached as long as the lockfile doesn't change)
-FROM node:24-alpine AS base
+# syntax=docker/dockerfile:1
+
+FROM node:24-alpine AS build
 WORKDIR /app
 RUN corepack enable
+
+# Manifests first: this layer only busts when dependencies change, so source
+# edits reuse the cached install.
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
-# Dev target: source code is bind-mounted by compose, HMR via port 5173
-FROM base AS dev
-EXPOSE 5173
-CMD ["pnpm", "dev", "--host"]
-
-# Build stage: produce the static bundle
-FROM base AS build
 COPY . .
 RUN pnpm build
 
-# Prod target: nginx serves dist/ - node never ships to production
-FROM nginx:alpine AS prod
+# Vite emits plain static files, so the runtime image needs no node and no
+# node_modules — just nginx and dist/.
+FROM nginx:alpine AS runtime
+
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
+
 EXPOSE 80
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s \
+	CMD wget -qO- http://127.0.0.1/ >/dev/null || exit 1

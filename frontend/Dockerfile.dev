@@ -1,0 +1,16 @@
+# syntax=docker/dockerfile:1
+
+FROM node:24-alpine
+WORKDIR /app
+RUN corepack enable
+
+EXPOSE 5173
+
+# Installing at startup rather than at build time: the source bind mount would
+# shadow anything baked into the image anyway, and a changed lockfile then only
+# needs a restart instead of an image rebuild.
+#
+# --store-dir keeps pnpm's store on the same mount as node_modules (a named
+# volume). Its default lands on another mount, so pnpm falls back to a
+# project-local store and drops a root-owned .pnpm-store into the host checkout.
+CMD ["sh", "-c", "pnpm install --store-dir /app/node_modules/.pnpm-store && pnpm dev --host 0.0.0.0 --port 5173"]
