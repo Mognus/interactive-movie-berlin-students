@@ -23,8 +23,12 @@ color_for() {
 grep -v '^#' scripts/clips-manifest.txt | while IFS='|' read -r id type label; do
   [ -z "$id" ] && continue
   out="frontend/public/clips/${id}.mp4"
+  # -nostdin is load-bearing: ffmpeg otherwise reads stdin for keypresses and
+  # steals bytes from the manifest this loop is reading, which truncates the
+  # ids of later lines. Some ffmpeg builds do it, some don't.
+  #
   # silent audio track included so the <video> element behaves like the real clips
-  ffmpeg -y -loglevel error \
+  ffmpeg -nostdin -y -loglevel error \
     -f lavfi -i "color=c=$(color_for "$type"):s=1280x720:d=${DURATION}" \
     -f lavfi -i "anullsrc=r=44100:cl=stereo" \
     -vf "drawtext=text='${id}':fontsize=84:fontcolor=white:x=(w-tw)/2:y=(h-th)/2-40, \
