@@ -6,29 +6,29 @@
 name: interactive-movie
 
 services:
-  web:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: ${PROJECT_NAME:-interactive-movie}-web
-    environment:
-      # ":80" locally, the bare domain on the server — Caddy then handles ACME.
-      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
-      # Redirect-only host. Leave unset unless the www DNS record exists,
-      # otherwise Caddy fails the ACME challenge for it.
-      WWW_ADDRESS: ${WWW_ADDRESS:-www.localhost}
-    # Fixed 80/443: Let's Encrypt reaches the challenge on the standard ports,
-    # so these cannot be remapped the way the old nginx port could.
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      # Holds the issued certificates. Without this Caddy re-requests them on
-      # every restart and runs into Let's Encrypt rate limits.
-      - caddy_data:/data
-      - caddy_config:/config
-    restart: always
+    web:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        container_name: ${PROJECT_NAME:-interactive-movie}-web
+        environment:
+            # ":80" locally, the bare domain on the server — Caddy then handles ACME.
+            SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+            # Redirect-only host. Leave unset unless the www DNS record exists,
+            # otherwise Caddy fails the ACME challenge for it.
+            WWW_ADDRESS: ${WWW_ADDRESS:-www.localhost}
+        # Fixed 80/443: Let's Encrypt reaches the challenge on the standard ports,
+        # so these cannot be remapped the way the old nginx port could.
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            # Holds the issued certificates. Without this Caddy re-requests them on
+            # every restart and runs into Let's Encrypt rate limits.
+            - caddy_data:/data
+            - caddy_config:/config
+        restart: always
 
 volumes:
-  caddy_data:
-  caddy_config:
+    caddy_data:
+    caddy_config:

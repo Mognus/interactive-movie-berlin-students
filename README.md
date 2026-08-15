@@ -41,11 +41,11 @@ The board opens with a scripted selection that plays by itself. Afterwards, thes
 three combinations cover the outcomes worth checking. Columns follow the board
 from left to right, and the labels are the ones printed on the notes:
 
-| Zeit | Motiv | Ort | Mordwaffe | Outcome |
-| --- | --- | --- | --- | --- |
-| morgens | Rache | Haus des Opfers | Insulin | Solution: `Finales Ende`, then the end screen |
-| morgens | any | Wald | any | Dead end: `DEAD END Wald Tag`, back to the board |
-| abends | Rache | Gertruden-Linde | Schlag auf den Kopf | Clue: `Info Richtung Standort`, back to the board |
+| Zeit    | Motiv | Ort             | Mordwaffe           | Outcome                                           |
+| ------- | ----- | --------------- | ------------------- | ------------------------------------------------- |
+| morgens | Rache | Haus des Opfers | Insulin             | Solution: `Finales Ende`, then the end screen     |
+| morgens | any   | Wald            | any                 | Dead end: `DEAD END Wald Tag`, back to the board  |
+| abends  | Rache | Gertruden-Linde | Schlag auf den Kopf | Clue: `Info Richtung Standort`, back to the board |
 
 The third one also proves that edge order is respected: the rule directly below it
 matches the same three values with any motive and leads to a dead end instead.

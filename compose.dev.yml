@@ -6,22 +6,22 @@
 name: interactive-movie-dev
 
 services:
-  web:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-    ports:
-      # Loopback-bound deliberately: Docker writes its own iptables rules, so a
-      # bare "5173:5173" is reachable from the internet even while UFW reports
-      # the port closed.
-      - "127.0.0.1:${DEV_PORT:-5173}:5173"
-    volumes:
-      # Source bind mount so Vite sees edits (inotify works natively on Linux).
-      - ./frontend:/app
-      # Named volume for node_modules: keeps the host's glibc builds from
-      # shadowing the container's musl ones. Refilled by the startup install,
-      # and also holds pnpm's store (see --store-dir in Dockerfile.dev).
-      - web_node_modules:/app/node_modules
+    web:
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile.dev
+        ports:
+            # Loopback-bound deliberately: Docker writes its own iptables rules, so a
+            # bare "5173:5173" is reachable from the internet even while UFW reports
+            # the port closed.
+            - "127.0.0.1:${DEV_PORT:-5173}:5173"
+        volumes:
+            # Source bind mount so Vite sees edits (inotify works natively on Linux).
+            - ./frontend:/app
+            # Named volume for node_modules: keeps the host's glibc builds from
+            # shadowing the container's musl ones. Refilled by the startup install,
+            # and also holds pnpm's store (see --store-dir in Dockerfile.dev).
+            - web_node_modules:/app/node_modules
 
 volumes:
-  web_node_modules:
+    web_node_modules:

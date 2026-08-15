@@ -1,16 +1,16 @@
 /* fullscreen film app: no scrolling, black canvas */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 html,
 body,
 #root {
-  height: 100%;
-  background: #0d0b09;
-  color: #e8e2d6;
-  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
-  overflow: hidden;
+    height: 100%;
+    background: #0d0b09;
+    color: #e8e2d6;
+    font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+    overflow: hidden;
 }
