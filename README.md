@@ -20,7 +20,7 @@ Then start one of the stacks:
 
 ```bash
 docker compose -f compose.dev.yml up          # dev, hot reload -> http://localhost:5173
-docker compose up -d --build                  # production      -> http://localhost:8080
+docker compose up -d --build                  # production      -> http://localhost
 docker compose -f compose.dev.yml down        # stop (or: docker compose down)
 ```
 
@@ -30,8 +30,10 @@ Without Docker:
 cd frontend && corepack enable && pnpm install && pnpm dev
 ```
 
-Ports and the container name prefix can be overridden through a `.env` file, see
-[`.env.example`](.env.example).
+The production stack serves through Caddy on ports 80 and 443. Locally that is
+plain HTTP; setting `SITE_ADDRESS` to a domain makes Caddy provision and renew
+the certificate on its own. The domain, the dev port, and the container name
+prefix are configured through a `.env` file, see [`.env.example`](.env.example).
 
 ## Test paths
 
@@ -94,7 +96,8 @@ are written to `frontend/public/clips/` and are excluded from version control.
 │   │   ├── components/     # Player and investigation board
 │   │   │   └── board/      # Board layout, notes, and connecting string
 │   │   └── engine/         # Story graph, types, and traversal logic
-│   ├── Dockerfile          # Production image, nginx serving the static build
+│   ├── Caddyfile           # Static file serving, SPA fallback, cache headers
+│   ├── Dockerfile          # Production image, Caddy serving the static build
 │   └── Dockerfile.dev      # Development image, Vite with hot reload
 ├── resources/              # Storyboard, screenplay, and board reference photos
 ├── scripts/                # Graph validation and clip generation
