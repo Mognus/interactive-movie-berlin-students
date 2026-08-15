@@ -10,23 +10,23 @@ export type AttributeKey = (typeof ATTRIBUTE_KEYS)[number];
 export type Selection = Record<AttributeKey, string>;
 
 export interface GraphNode {
-  type: "clip" | "board" | "end";
-  src?: string;
-  label?: string;
-  // pre-made selection played automatically on the first board visit (overview PDF, step 2)
-  firstVisitAuto?: string[];
+    type: "clip" | "board" | "end";
+    src?: string;
+    label?: string;
+    // pre-made selection played automatically on the first board visit (overview PDF, step 2)
+    firstVisitAuto?: string[];
 }
 
 export interface GraphEdge {
-  from: string;
-  to: string;
-  // 4-slot pattern [ort, zeit, mordwaffe, motiv], "*" = ALLE; absent on clip->board edges
-  when?: string[];
+    from: string;
+    to: string;
+    // 4-slot pattern [ort, zeit, mordwaffe, motiv], "*" = ALLE; absent on clip->board edges
+    when?: string[];
 }
 
 export interface Graph {
-  start: string;
-  attributes: Record<AttributeKey, string[]>;
-  nodes: Record<string, GraphNode>;
-  edges: GraphEdge[];
+    start: string;
+    attributes: Record<AttributeKey, string[]>;
+    nodes: Record<string, GraphNode>;
+    edges: GraphEdge[];
 }
