@@ -1,6 +1,11 @@
 # generated placeholder videos - recreate with scripts/generate-clips.sh
 frontend/public/clips/
 
+# scanned post-it artwork, ~90 MB of PNGs - kept out of the repo like the
+# clips and supplied out of band
+frontend/public/post-its/
+resources/post-its.zip
+
 node_modules/
 dist/
 .env
