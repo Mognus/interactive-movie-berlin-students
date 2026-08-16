@@ -7,6 +7,11 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p frontend/public/clips
 
+# Wipe first: the directory is generated and gitignored, so nothing of value
+# lives here. Without this, clips from an older manifest - or from the run that
+# truncated the ids - stay behind and get baked into the image.
+rm -f frontend/public/clips/*.mp4
+
 DURATION=5
 
 # background color per outcome type (red=deadend, yellow=info, green=finale, blue=intro)
@@ -34,7 +39,8 @@ grep -v '^#' scripts/clips-manifest.txt | while IFS='|' read -r id type label; d
     -vf "drawtext=text='${id}':fontsize=84:fontcolor=white:x=(w-tw)/2:y=(h-th)/2-40, \
          drawtext=text='${label}':fontsize=40:fontcolor=white@0.8:x=(w-tw)/2:y=(h-th)/2+70, \
          drawtext=text='%{pts\:hms}':fontsize=32:fontcolor=yellow:x=24:y=24" \
-    -shortest -t "$DURATION" "$out"
+    -shortest -t "$DURATION" \
+    -movflags +faststart "$out"
   echo "  $out ($type)"
 done
 
