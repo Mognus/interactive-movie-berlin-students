@@ -82,6 +82,35 @@
     animation: twine-fade 180ms 180ms ease-out both;
 }
 
+/* Scenery cord: sits with the photos rather than in the play layer, and is
+   duller and thinner so it never competes with the string the player draws.
+   Both animations are cancelled - it is meant to have been hanging all along. */
+.board-twine--decor {
+    z-index: 0;
+}
+
+.board-twine--decor .twine-base,
+.board-twine--decor .twine-stripe {
+    animation: none;
+    stroke-width: 8;
+}
+
+.board-twine--decor .twine-base {
+    stroke: #e6dac2;
+    stroke-dasharray: none;
+}
+
+.board-twine--decor .twine-stripe {
+    stroke: #8f3b2f;
+    stroke-dasharray: 14 14;
+}
+
+/* pin heads on the scenery cord; the notes draw their own in Zettel */
+.twine-pin {
+    stroke: rgba(40, 22, 6, 0.35);
+    stroke-width: 2;
+}
+
 @keyframes twine-draw {
     from {
         stroke-dashoffset: 1;
@@ -173,10 +202,27 @@
 }
 
 .zettel.is-selected {
-    box-shadow:
-        0 1.4cqw 2cqw rgba(40, 22, 6, 0.5),
-        0 0 0 0.35cqw #b3282d;
     filter: brightness(1.08);
+    /* above its neighbours, otherwise an adjacent note clips the glow */
+    z-index: 3;
+    /* the ring breathes instead of sitting still - on cork this reads as
+       "picked" far quicker than a static outline does */
+    animation: zettel-glow 1500ms ease-in-out infinite alternate;
+}
+
+@keyframes zettel-glow {
+    from {
+        box-shadow:
+            0 1.4cqw 2cqw rgba(40, 22, 6, 0.5),
+            0 0 0 0.35cqw #b3282d,
+            0 0 1cqw 0.05cqw rgba(179, 40, 45, 0.4);
+    }
+    to {
+        box-shadow:
+            0 1.4cqw 2cqw rgba(40, 22, 6, 0.5),
+            0 0 0 0.35cqw #b3282d,
+            0 0 3.6cqw 0.9cqw rgba(179, 40, 45, 0.9);
+    }
 }
 
 .zettel:focus-visible {
@@ -218,5 +264,15 @@
     .twine-base,
     .twine-stripe {
         animation: none;
+    }
+
+    /* a pulsing ring is exactly the kind of motion this setting asks to stop;
+       the note keeps the solid ring from the keyframe below */
+    .zettel.is-selected {
+        animation: none;
+        box-shadow:
+            0 1.4cqw 2cqw rgba(40, 22, 6, 0.5),
+            0 0 0 0.35cqw #b3282d,
+            0 0 2.4cqw 0.5cqw rgba(179, 40, 45, 0.7);
     }
 }
