@@ -125,6 +125,30 @@ export const PROPS: PropLayout[] = [
     { src: street2, x: 22, y: 355, w: 110, h: 84, rotation: -4 },
 ];
 
+import geistVonGertrude from "../../assets/cards/geist-von-gertrude.webp";
+import schuhGr from "../../assets/cards/schuh-gr-4243.webp";
+import juni1973 from "../../assets/cards/juni-1973.webp";
+import umkreis30km from "../../assets/cards/umkreis-30km.webp";
+import ermordet from "../../assets/cards/ermordet.webp";
+import ottoSchulz from "../../assets/cards/otto-schulz.webp";
+import fundortLeiche from "../../assets/cards/fundort-leiche.webp";
+import verbindungDmz from "../../assets/cards/verbindung-dmz.webp";
+
+// The handwritten white clue cards. Same layout shape as PROPS, but kept apart
+// because they render without a CSS shadow - theirs is baked into the artwork.
+export const CARDS: PropLayout[] = [
+    { src: geistVonGertrude, x: 872, y: 200, w: 155, h: 148, rotation: -2 },
+    { src: schuhGr, x: 548, y: 483, w: 135, h: 135, rotation: -6 },
+    { src: juni1973, x: 1425, y: 350, w: 150, h: 153, rotation: -4 },
+    // the right-hand pair hangs over the edge of the board on the photo
+    { src: umkreis30km, x: 1550, y: 505, w: 140, h: 141, rotation: -8 },
+    { src: ermordet, x: 1405, y: 980, w: 155, h: 155, rotation: -4 },
+    // mostly covered by the "Wald" note, exactly as on the reference board
+    { src: ottoSchulz, x: 940, y: 665, w: 135, h: 129, rotation: 0 },
+    { src: fundortLeiche, x: 1585, y: 55, w: 145, h: 148, rotation: -3 },
+    { src: verbindungDmz, x: 35, y: 660, w: 140, h: 141, rotation: -5 },
+];
+
 // --- shared positioning -------------------------------------------------
 
 // Notes and scenery resolve through the same function, so both live in one

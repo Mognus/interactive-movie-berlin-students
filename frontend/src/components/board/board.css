@@ -25,13 +25,24 @@
 
 /* --- scenery layer ------------------------------------------------------ */
 
-/* photos and the drawing: below twine and notes, and never in the way of a click */
-.board-prop {
+/* photos and clue cards: below twine and notes, and never in the way of a click */
+.board-prop,
+.board-card {
     position: absolute;
     z-index: 0;
-    object-fit: cover;
     pointer-events: none;
+}
+
+/* bare prints - the cast shadow is what makes them read as pinned to the cork */
+.board-prop {
+    object-fit: cover;
     box-shadow: 0 3px 7px rgba(30, 18, 6, 0.45);
+}
+
+/* no box-shadow here: the card artwork has its own baked in, and the PNG is
+   transparent around the paper, so a CSS shadow would trace the bounding box */
+.board-card {
+    object-fit: contain;
 }
 
 /* --- twine layer ------------------------------------------------------- */

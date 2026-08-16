@@ -8,6 +8,7 @@ import { Zettel, ZettelStatic } from "./board/Zettel";
 import { Twine } from "./board/Twine";
 import {
     anchorOf,
+    CARDS,
     HEADERS,
     NOTES,
     PROPS,
@@ -96,6 +97,17 @@ export function Board({ attributes, auto, onSubmit }: BoardProps) {
                         alt=""
                         aria-hidden="true"
                         style={propStyle(prop)}
+                    />
+                ))}
+
+                {CARDS.map((card) => (
+                    <img
+                        key={card.src}
+                        className="board-card"
+                        src={card.src}
+                        alt=""
+                        aria-hidden="true"
+                        style={propStyle(card)}
                     />
                 ))}
 
