@@ -6,6 +6,17 @@
     background: #000;
 }
 
+/* Sits over whatever is on screen when the browser refused play(). Fixed rather
+   than absolute so it covers the video regardless of the surrounding layout. */
+.tap-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.78);
+    color: #f3ece0;
+    text-align: center;
+    padding: 1.5rem;
+}
+
 /* --- centered start / end screens --- */
 .screen {
     height: 100%;

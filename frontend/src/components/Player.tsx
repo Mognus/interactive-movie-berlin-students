@@ -1,12 +1,46 @@
-// Fullscreen clip playback. The parent decides what happens when the clip ends.
-export function Player({ src, onEnded }: { src: string; onEnded: () => void }) {
-    return (
-        <video
-            className="player"
-            src={src}
-            autoPlay
-            playsInline
-            onEnded={onEnded}
-        />
-    );
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+
+interface PlayerProps {
+    // undefined while a board is showing: the element then keeps the previous
+    // clip loaded instead of tearing its source down
+    src?: string;
+    visible: boolean;
+    onEnded: () => void;
+    onBlocked: () => void;
 }
+
+// Fullscreen clip playback. Deliberately one long-lived <video> for the whole
+// session rather than one per clip: iOS grants playback permission per element
+// and only from a real user gesture, so a freshly mounted element would be
+// blocked from the second clip onwards. The parent unlocks this one inside the
+// start click and it stays authorised from then on.
+export const Player = forwardRef<HTMLVideoElement, PlayerProps>(
+    function Player({ src, visible, onEnded, onBlocked }, ref) {
+        const videoRef = useRef<HTMLVideoElement>(null);
+        useImperativeHandle(ref, () => videoRef.current!, []);
+
+        // Loading is separate from playing so the first clip is already buffered
+        // by the time the start button is pressed.
+        useEffect(() => {
+            const video = videoRef.current;
+            if (video && src) video.src = src;
+        }, [src]);
+
+        useEffect(() => {
+            const video = videoRef.current;
+            if (!video || !visible) return;
+            // resolves immediately when the click handler already started it
+            video.play().catch(onBlocked);
+        }, [src, visible, onBlocked]);
+
+        return (
+            <video
+                ref={videoRef}
+                className="player"
+                playsInline
+                hidden={!visible}
+                onEnded={onEnded}
+            />
+        );
+    },
+);
