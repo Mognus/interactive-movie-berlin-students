@@ -4,17 +4,12 @@
     height: 100%;
     display: grid;
     place-items: center;
+    /* stays visible until the texture is decoded, so the board never flashes white */
     background-color: #b98d5f;
-    /* two offset dot layers fake the cork grain without an image asset */
-    background-image:
-        radial-gradient(rgba(74, 46, 18, 0.22) 1.2px, transparent 1.3px),
-        radial-gradient(rgba(255, 226, 184, 0.18) 1.1px, transparent 1.2px);
-    background-size:
-        13px 13px,
-        21px 21px;
-    background-position:
-        0 0,
-        7px 9px;
+    /* seamless photo, tiled at its native 960x640 - Vite hashes the file, which
+       is what earns it the immutable cache header in the Caddyfile */
+    background-image: url("../../assets/cork-board.webp");
+    background-repeat: repeat;
     box-shadow: inset 0 0 22vw rgba(48, 28, 10, 0.45);
 }
 
