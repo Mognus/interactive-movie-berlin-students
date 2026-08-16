@@ -89,11 +89,62 @@ export const SOLVE_NOTE: NoteLayout = {
 // The twine hangs from the pin, not from the middle of the note.
 export const anchorOf = (n: NoteLayout) => ({ x: n.x, y: n.y - NOTE_H * 0.35 });
 
-// Positioning shared by notes and headers, so both sit in the exact same coordinate space.
-export const spotStyle = (n: NoteLayout) => ({
-    left: `${(n.x / BOARD_W) * 100}%`,
-    top: `${(n.y / BOARD_H) * 100}%`,
-    width: `${(NOTE_W / BOARD_W) * 100}%`,
-    height: `${(NOTE_H / BOARD_H) * 100}%`,
-    transform: `translate(-50%, -50%) rotate(${n.rotation}deg)`,
+// --- scenery ------------------------------------------------------------
+
+// Unlike the notes, every photo has its own size, so w/h are carried per item
+// instead of coming from a shared constant. Values are the printed size in
+// board units, taken from the reference photo.
+export interface PropLayout {
+    src: string;
+    x: number; // center, same board units as the notes
+    y: number;
+    w: number;
+    h: number;
+    rotation: number;
+}
+
+// Vite resolves these to hashed URLs in /assets, which is what gets them the
+// immutable cache header from the Caddyfile.
+import street1 from "../../assets/props/street-1.webp";
+import street2 from "../../assets/props/street-2.webp";
+import portraitSuit from "../../assets/props/portrait-suit.webp";
+import portraitGirl from "../../assets/props/portrait-girl.webp";
+import portraitMan from "../../assets/props/portrait-man.webp";
+
+// The Gertrudenlinde drawing (assets/props/drawing-gertrudenlinde.webp) is the
+// large sheet on the left of the reference board. Parked for now, not deleted -
+// it is wanted again later.
+
+// Pure decoration - never clickable, never part of the engine. Ordered back to front.
+export const PROPS: PropLayout[] = [
+    { src: portraitMan, x: 180, y: 195, w: 200, h: 343, rotation: -2 },
+    { src: portraitSuit, x: 528, y: 62, w: 78, h: 90, rotation: -6 },
+    { src: portraitGirl, x: 1055, y: 105, w: 215, h: 163, rotation: 3 },
+    { src: street1, x: 495, y: 1045, w: 272, h: 217, rotation: -8 },
+    // hangs half off the left edge on the reference board
+    { src: street2, x: 22, y: 355, w: 110, h: 84, rotation: -4 },
+];
+
+// --- shared positioning -------------------------------------------------
+
+// Notes and scenery resolve through the same function, so both live in one
+// coordinate space and stay aligned when BOARD_W/BOARD_H ever change.
+const placeStyle = (
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    rotation: number,
+) => ({
+    left: `${(x / BOARD_W) * 100}%`,
+    top: `${(y / BOARD_H) * 100}%`,
+    width: `${(w / BOARD_W) * 100}%`,
+    height: `${(h / BOARD_H) * 100}%`,
+    transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
 });
+
+export const spotStyle = (n: NoteLayout) =>
+    placeStyle(n.x, n.y, NOTE_W, NOTE_H, n.rotation);
+
+export const propStyle = (p: PropLayout) =>
+    placeStyle(p.x, p.y, p.w, p.h, p.rotation);

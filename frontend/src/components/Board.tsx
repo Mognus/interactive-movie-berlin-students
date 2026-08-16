@@ -10,6 +10,8 @@ import {
     anchorOf,
     HEADERS,
     NOTES,
+    PROPS,
+    propStyle,
     SOLVE_NOTE,
     spotStyle,
 } from "./board/positions";
@@ -85,6 +87,18 @@ export function Board({ attributes, auto, onSubmit }: BoardProps) {
     return (
         <div className="board-screen">
             <div className="board-stage" aria-busy={!!auto}>
+                {/* scenery first: it sits behind the twine and the notes */}
+                {PROPS.map((prop) => (
+                    <img
+                        key={prop.src}
+                        className="board-prop"
+                        src={prop.src}
+                        alt=""
+                        aria-hidden="true"
+                        style={propStyle(prop)}
+                    />
+                ))}
+
                 {HEADERS.map((header) => (
                     <ZettelStatic key={header.label} note={header} />
                 ))}

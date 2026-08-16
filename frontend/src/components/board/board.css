@@ -23,6 +23,17 @@
     container-type: inline-size;
 }
 
+/* --- scenery layer ------------------------------------------------------ */
+
+/* photos and the drawing: below twine and notes, and never in the way of a click */
+.board-prop {
+    position: absolute;
+    z-index: 0;
+    object-fit: cover;
+    pointer-events: none;
+    box-shadow: 0 3px 7px rgba(30, 18, 6, 0.45);
+}
+
 /* --- twine layer ------------------------------------------------------- */
 
 /* below the notes so pins cover it; never swallows a click */
