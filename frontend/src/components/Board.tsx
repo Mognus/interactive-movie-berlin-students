@@ -9,6 +9,7 @@ import { Twine } from "./board/Twine";
 import {
     anchorOf,
     CARDS,
+    DECOR_STRANDS,
     HEADERS,
     NOTES,
     PROPS,
@@ -108,6 +109,15 @@ export function Board({ attributes, auto, onSubmit }: BoardProps) {
                         alt=""
                         aria-hidden="true"
                         style={propStyle(card)}
+                    />
+                ))}
+
+                {/* after the pictures so the cord lies on top of them */}
+                {DECOR_STRANDS.map((strand) => (
+                    <Twine
+                        key={strand[0].key}
+                        points={strand}
+                        variant="decor"
                     />
                 ))}
 

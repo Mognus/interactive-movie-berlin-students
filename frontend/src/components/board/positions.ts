@@ -149,6 +149,39 @@ export const CARDS: PropLayout[] = [
     { src: verbindungDmz, x: 35, y: 660, w: 140, h: 141, rotation: -5 },
 ];
 
+// Decorative cord between the photos and the clue cards. Deliberately its own
+// pin coordinates instead of anchors on PROPS/CARDS: on the reference board the
+// string runs past the pictures, not exactly through their centers. Each entry
+// is one continuous strand. Structurally a TwinePoint[], without importing the
+// type from Twine.tsx and creating a cycle.
+export const DECOR_STRANDS: {
+    key: string;
+    x: number;
+    y: number;
+    pin?: string;
+}[][] = [
+    // the long run: "ermordet" up to the small portrait, on to the girl, then
+    // off the board - the loose end implies the rest of the investigation
+    [
+        { key: "long-ermordet", x: 1391, y: 935, pin: "#e8c33a" },
+        { key: "long-suit", x: 566, y: 62, pin: "#e8c33a" },
+        { key: "long-girl", x: 1070, y: 40, pin: "#d33a5c" },
+        { key: "long-away", x: 1640, y: -80 },
+    ],
+    // down the left edge: the portrait to the small picture below it, then off
+    // the board - the visible cork is only a crop of the real one
+    [
+        { key: "left-man", x: 250, y: 120, pin: "#f2ece0" },
+        { key: "left-street", x: 48, y: 342, pin: "#2f6fbf" },
+        { key: "left-away", x: -170, y: 560 },
+    ],
+    // between the date card and Otto Schulz
+    [
+        { key: "clue-juni", x: 1416, y: 322, pin: "#d33a5c" },
+        { key: "clue-otto", x: 983, y: 645, pin: "#2f8f6f" },
+    ],
+];
+
 // --- shared positioning -------------------------------------------------
 
 // Notes and scenery resolve through the same function, so both live in one

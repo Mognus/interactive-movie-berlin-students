@@ -4,6 +4,7 @@ export interface TwinePoint {
     key: string; // identifies the point across renders, used to key the segments
     x: number;
     y: number;
+    pin?: string; // pin head color; the play twine leaves this off, the notes bring their own
 }
 
 // How far a segment dips relative to its own length.
@@ -20,10 +21,21 @@ const segPath = (a: TwinePoint, b: TwinePoint) => {
 // Draws string through the given points. Knows nothing about notes or attributes -
 // it shares only the board's coordinate space, which is what keeps the ends on the
 // pins at any window size without measuring the DOM.
-export function Twine({ points }: { points: TwinePoint[] }) {
+//
+// "decor" is the scenery cord: same geometry, but it is already hanging when the
+// board appears, so the draw-on animation is switched off in CSS.
+export function Twine({
+    points,
+    variant = "play",
+}: {
+    points: TwinePoint[];
+    variant?: "play" | "decor";
+}) {
     return (
         <svg
-            className="board-twine"
+            className={
+                variant === "decor" ? "board-twine board-twine--decor" : "board-twine"
+            }
             viewBox={`0 0 ${BOARD_W} ${BOARD_H}`}
             aria-hidden="true"
         >
@@ -40,6 +52,20 @@ export function Twine({ points }: { points: TwinePoint[] }) {
                     </g>
                 );
             })}
+
+            {/* drawn last so a head always covers the string ends meeting under it */}
+            {points
+                .filter((point) => point.pin)
+                .map((point) => (
+                    <circle
+                        key={`pin-${point.key}`}
+                        className="twine-pin"
+                        cx={point.x}
+                        cy={point.y}
+                        r={13}
+                        fill={point.pin}
+                    />
+                ))}
         </svg>
     );
 }
