@@ -8,6 +8,11 @@ import "./App.css";
 // Bed for every board that follows a clip without its own narration.
 const BASELINE_VOICE_OVER = "/audio/vo-baseline.mp3";
 
+// Testing aids: always on while developing, and switchable into a real build
+// through VITE_DEV_TOOLS so the team can walk the story on the server without
+// waiting out every clip. Off by default - the audience must not get these.
+const DEV_TOOLS = import.meta.env.DEV || import.meta.env.VITE_DEV_TOOLS === "1";
+
 // Mobile browsers hand the page a viewport that reaches under their own chrome,
 // which is what made the player look mis-scaled. Fullscreen removes the chrome
 // outright, and the orientation lock keeps a 16:9 film out of a portrait
@@ -106,17 +111,17 @@ function App() {
                 </div>
             )}
 
-            {/* Dev only: the clips run up to five minutes, so walking a path by
-                hand is otherwise unbearable. Deliberately routed through
-                onClipEnded rather than step() - a skip has to reveal props and
-                arm the voice over exactly like a clip that ran out, or testing
-                would prove nothing about the real playthrough. */}
-            {import.meta.env.DEV && started && node.type === "clip" && (
+            {/* The clips run up to five minutes, so walking a path by hand is
+                otherwise unbearable. Deliberately routed through onClipEnded
+                rather than step() - a skip has to reveal props and arm the
+                voice over exactly like a clip that ran out, or testing would
+                prove nothing about the real playthrough. */}
+            {DEV_TOOLS && started && node.type === "clip" && (
                 <button
                     type="button"
                     className="dev-skip"
                     onClick={onClipEnded}
-                    title="nur im Dev-Build"
+                    title="Testhilfe, nur bei aktivierten Dev-Tools sichtbar"
                 >
                     Skip ▸ {nodeId}
                 </button>

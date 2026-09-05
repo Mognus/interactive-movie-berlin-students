@@ -10,6 +10,10 @@ services:
         build:
             context: ./frontend
             dockerfile: Dockerfile
+            args:
+                # Baked into the bundle, so changing DEV_TOOLS needs
+                # `docker compose up -d --build`, not just a restart.
+                VITE_DEV_TOOLS: ${DEV_TOOLS:-0}
         container_name: ${PROJECT_NAME:-interactive-movie}-web
         environment:
             # ":80" locally, the bare domain on the server — Caddy then handles ACME.
