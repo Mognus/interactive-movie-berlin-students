@@ -1,5 +1,5 @@
 {
-    "comment": "Story graph transcribed from resources/a-crime-noone-saw-coming-BeatBoard.pdf. Best-effort - verify against the BeatBoard! Edge order = priority (first match wins), '*' = ALLE. Slots in 'when' and 'firstVisitAuto' follow ATTRIBUTE_KEYS, i.e. the board's column order: zeit, motiv, ort, mordwaffe.",
+    "comment": "Story graph transcribed from resources/a-crime-noone-saw-coming-BeatBoard.pdf. Edge order = priority (first match wins), '*' = ALLE. Slots in 'when' and 'firstVisitAuto' follow ATTRIBUTE_KEYS, i.e. the board's column order: zeit, motiv, ort, mordwaffe. 'voiceOver' is the bed the board plays once when it is entered from that clip; without one it falls back to the baseline. 'revealsProp' pins a piece of scenery onto the board from that clip onwards.",
     "start": "intro",
     "attributes": {
         "zeit": ["morgens", "abends"],
@@ -8,7 +8,11 @@
         "mordwaffe": ["schlag", "cyanid", "insulin"]
     },
     "nodes": {
-        "intro": { "type": "clip", "src": "/clips/intro.mp4" },
+        "intro": {
+            "type": "clip",
+            "src": "/clips/intro.mp4",
+            "voiceOver": "/audio/vo-after-intro.mp3"
+        },
         "board": {
             "type": "board",
             "firstVisitAuto": ["abends", "eifersucht", "wald", "schlag"]
@@ -21,7 +25,8 @@
         "OS_1_2_A_12": {
             "type": "clip",
             "src": "/clips/OS_1_2_A_12.mp4",
-            "label": "Falsches Motiv"
+            "label": "Falsches Motiv",
+            "voiceOver": "/audio/vo-after-OS_1_2_A_12.mp3"
         },
         "OS_1_1_A_A": {
             "type": "clip",
@@ -31,22 +36,14 @@
         "OS_2_2_1_A": {
             "type": "clip",
             "src": "/clips/OS_2_2_1_A.mp4",
-            "label": "Info Richtung Sage, falsch"
+            "label": "Info Richtung Sage, falsch",
+            "revealsProp": "gertrudenlinde-poster"
         },
         "OS_2_2_23_A": {
             "type": "clip",
             "src": "/clips/OS_2_2_23_A.mp4",
-            "label": "DEAD END Haus"
-        },
-        "OS_2_1_23_12": {
-            "type": "clip",
-            "src": "/clips/OS_2_1_23_12.mp4",
-            "label": "DEAD END Haus"
-        },
-        "OS_2_1_2_3": {
-            "type": "clip",
-            "src": "/clips/OS_2_1_2_3.mp4",
-            "label": "DEAD END Haus"
+            "label": "DEAD END Haus",
+            "voiceOver": "/audio/vo-after-OS_2_2_23_A.mp3"
         },
         "OS_2_1_3_3": {
             "type": "clip",
@@ -61,32 +58,29 @@
         "OS_3_1_A_A": {
             "type": "clip",
             "src": "/clips/OS_3_1_A_A.mp4",
-            "label": "DEAD END Lindenbaum"
+            "label": "DEAD END Lindenbaum Tag"
+        },
+        "OS_3_2_A_A": {
+            "type": "clip",
+            "src": "/clips/OS_3_2_A_A.mp4",
+            "label": "DEAD END Lindenbaum Nacht"
         },
         "OS_3_2_1_3": {
             "type": "clip",
             "src": "/clips/OS_3_2_1_3.mp4",
-            "label": "Info Richtung Standort"
-        },
-        "OS_3_2_1_A": {
-            "type": "clip",
-            "src": "/clips/OS_3_2_1_A.mp4",
-            "label": "DEAD END Lindenbaum"
+            "label": "Info Richtung Standort",
+            "voiceOver": "/audio/vo-after-OS_3_2_1_3.mp3"
         },
         "OS_3_2_3_3": {
             "type": "clip",
             "src": "/clips/OS_3_2_3_3.mp4",
-            "label": "Info Richtung Mordwaffe"
+            "label": "Info Richtung Mordwaffe",
+            "voiceOver": "/audio/vo-after-OS_3_2_3_3.mp3"
         },
         "OS_3_2_3_2": {
             "type": "clip",
             "src": "/clips/OS_3_2_3_2.mp4",
             "label": "Info Richtung Motiv, Sage behaftet"
-        },
-        "OS_3_2_3_1": {
-            "type": "clip",
-            "src": "/clips/OS_3_2_3_1.mp4",
-            "label": "DEAD END Lindenbaum"
         },
         "OS_3_2_2_A": {
             "type": "clip",
@@ -131,18 +125,13 @@
         },
         {
             "from": "board",
-            "when": ["morgens", "rache", "verlassenes-haus", "cyanid"],
-            "to": "OS_2_1_2_3"
-        },
-        {
-            "from": "board",
             "when": ["morgens", "*", "verlassenes-haus", "schlag"],
             "to": "OS_2_1_1_A"
         },
         {
             "from": "board",
             "when": ["morgens", "*", "verlassenes-haus", "*"],
-            "to": "OS_2_1_23_12"
+            "to": "OS_2_2_23_A"
         },
 
         {
@@ -158,7 +147,7 @@
         {
             "from": "board",
             "when": ["abends", "*", "gertrudenlinde", "schlag"],
-            "to": "OS_3_2_1_A"
+            "to": "OS_3_2_A_A"
         },
         {
             "from": "board",
@@ -173,7 +162,7 @@
         {
             "from": "board",
             "when": ["abends", "geld", "gertrudenlinde", "insulin"],
-            "to": "OS_3_2_3_1"
+            "to": "OS_3_2_A_A"
         },
         {
             "from": "board",
@@ -186,15 +175,12 @@
         { "from": "OS_1_1_A_A", "to": "board" },
         { "from": "OS_2_2_1_A", "to": "board" },
         { "from": "OS_2_2_23_A", "to": "board" },
-        { "from": "OS_2_1_23_12", "to": "board" },
-        { "from": "OS_2_1_2_3", "to": "board" },
         { "from": "OS_2_1_1_A", "to": "board" },
         { "from": "OS_3_1_A_A", "to": "board" },
+        { "from": "OS_3_2_A_A", "to": "board" },
         { "from": "OS_3_2_1_3", "to": "board" },
-        { "from": "OS_3_2_1_A", "to": "board" },
         { "from": "OS_3_2_3_3", "to": "board" },
         { "from": "OS_3_2_3_2", "to": "board" },
-        { "from": "OS_3_2_3_1", "to": "board" },
         { "from": "OS_3_2_2_A", "to": "board" },
 
         { "from": "OS_2_1_3_3", "to": "credits" }

@@ -1,20 +1,19 @@
-# Placeholder clips, transcribed from resources/a-crime-noone-saw-coming-BeatBoard.pdf
+# Placeholder clips, one per node in graph.json. Keep the two in step: the
+# BeatBoard funnels all three "DEAD END Haus" beats into OS_2_2_23_A and all
+# three "DEAD END Lindenbaum" beats into one clip, which the delivery splits
+# into a day and a night version.
 # Format: id|type|label       type: intro, info, deadend, finale
-# NOTE: best-effort transcription - verify against the BeatBoard!
 intro|intro|Opening
 OS_1_2_A_3|info|Info zu dem Motiv
 OS_1_2_A_12|info|Falsches Motiv
 OS_1_1_A_A|deadend|DEAD END Wald Tag
 OS_2_2_1_A|info|Info Richtung Sage - falsch
 OS_2_2_23_A|deadend|DEAD END Haus
-OS_2_1_23_12|deadend|DEAD END Haus
-OS_2_1_2_3|deadend|DEAD END Haus
 OS_2_1_3_3|finale|Finales Ende
 OS_2_1_1_A|info|Info Richtung Detektiv - verdaechtig
-OS_3_1_A_A|deadend|DEAD END Lindenbaum
+OS_3_1_A_A|deadend|DEAD END Lindenbaum Tag
+OS_3_2_A_A|deadend|DEAD END Lindenbaum Nacht
 OS_3_2_1_3|info|Info Richtung Standort
-OS_3_2_1_A|deadend|DEAD END Lindenbaum
 OS_3_2_3_3|info|Info Richtung Mordwaffe
 OS_3_2_3_2|info|Info Richtung Motiv - Sage behaftet
-OS_3_2_3_1|deadend|DEAD END Lindenbaum
 OS_3_2_2_A|info|Info Richtung Mordwaffe - Sage behaftet
