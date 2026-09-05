@@ -3,3 +3,9 @@ node_modules
 dist
 .git
 *.md
+
+# Film material is bind-mounted at runtime, not baked in: half a gigabyte in
+# the image would mean a full rebuild and re-push for every re-cut clip.
+# See the volumes in compose.yml and scripts/push-media.sh.
+public/clips
+public/audio

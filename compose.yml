@@ -27,6 +27,13 @@ services:
             # every restart and runs into Let's Encrypt rate limits.
             - caddy_data:/data
             - caddy_config:/config
+            # Film material, kept out of the image (see frontend/.dockerignore).
+            # Read-only: Caddy only ever serves these, and a stray write must not
+            # reach the masters. MEDIA_DIR defaults to the local public folder so
+            # a prod smoke test works straight after prepare-media.sh; on the
+            # server it points at what push-media.sh rsyncs into.
+            - ${MEDIA_DIR:-./frontend/public}/clips:/srv/clips:ro
+            - ${MEDIA_DIR:-./frontend/public}/audio:/srv/audio:ro
         restart: always
 
 volumes:
