@@ -116,9 +116,15 @@ Point `MEDIA_DIR` in the server's `.env` at the folder it rsyncs into, then
 the ansible fleet's inventory and can be overridden with `REMOTE_HOST`,
 `REMOTE_DIR` and `SSH_KEY`.
 
-Note that `/clips/*` and `/audio/*` are served `immutable` for a year. Filenames
-are stable, so a browser that has already seen a clip will not notice a re-cut
-under the same name — rename it, or test in a fresh profile.
+`/clips/*` and `/audio/*` are served `immutable` for a year and the filenames
+are stable, so a browser that has already loaded a clip will never ask for it
+again. Replacing the file on the server does nothing for that browser, and no
+reload gets past an immutable entry — only a different URL does.
+
+That is what `MEDIA_VERSION` in
+[`frontend/src/engine/engine.ts`](frontend/src/engine/engine.ts) is for: it
+appends `?v=N` to every clip and voice over URL. **Bump it whenever you replace
+material**, otherwise anyone who saw the old cut keeps seeing it.
 
 ## Placeholder clips
 
