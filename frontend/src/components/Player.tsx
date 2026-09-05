@@ -28,7 +28,20 @@ export const Player = forwardRef<HTMLVideoElement, PlayerProps>(
 
         useEffect(() => {
             const video = videoRef.current;
-            if (!video || !visible) return;
+            if (!video) return;
+
+            if (!visible) {
+                // Nothing else stops this element - it outlives every clip, and
+                // a clip used to only ever be left by ending on its own. Leaving
+                // one early (dev skip) would otherwise keep the audio running
+                // under the board. Rewinding matters too: a clip the story
+                // reaches twice keeps the same src, so without this it would
+                // resume from wherever it was cut off.
+                video.pause();
+                video.currentTime = 0;
+                return;
+            }
+
             // resolves immediately when the click handler already started it
             video.play().catch(onBlocked);
         }, [src, visible, onBlocked]);
