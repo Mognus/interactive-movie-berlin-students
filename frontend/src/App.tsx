@@ -1,8 +1,28 @@
 import { useCallback, useRef, useState } from "react";
 import { graph, nodeOf, step } from "./engine/engine";
 import { Player } from "./components/Player";
+import { Ambience } from "./components/Ambience";
 import { Board } from "./components/Board";
 import "./App.css";
+
+// Bed for every board that follows a clip without its own narration.
+const BASELINE_VOICE_OVER = "/audio/vo-baseline.mp3";
+
+// Mobile browsers hand the page a viewport that reaches under their own chrome,
+// which is what made the player look mis-scaled. Fullscreen removes the chrome
+// outright, and the orientation lock keeps a 16:9 film out of a portrait
+// letterbox. Both are best effort: iPhone Safari offers neither, which is why
+// the CSS fixes have to stand on their own and the rotate hint still exists.
+async function enterFullscreen() {
+    try {
+        await document.documentElement.requestFullscreen?.({
+            navigationUI: "hide",
+        });
+        await screen.orientation?.lock?.("landscape");
+    } catch {
+        // refused or unsupported - the layout works without it
+    }
+}
 
 function App() {
     // browsers block un-muted autoplay without a user gesture, so the film starts behind a click
@@ -12,11 +32,20 @@ function App() {
     // set when the browser refuses play(); without this the clip would just sit
     // frozen on its first frame with nothing telling the audience why
     const [blocked, setBlocked] = useState(false);
+    // The clip the board was entered from. This is what turns "after scene X"
+    // in the script into something the board can act on - it picks the voice over.
+    const [lastClip, setLastClip] = useState<string>();
+    // Scenery the story has pinned onto the board, e.g. the Gertrudenlinde
+    // drawing the detective turns up in OS_2_2_1_A. Grows, never shrinks.
+    const [revealed, setRevealed] = useState<string[]>([]);
 
     const videoRef = useRef<HTMLVideoElement>(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
     const onBlocked = useCallback(() => setBlocked(true), []);
 
     const node = nodeOf(nodeId);
+    const voiceOver =
+        (lastClip && nodeOf(lastClip).voiceOver) || BASELINE_VOICE_OVER;
 
     // play() is called straight out of the click rather than left to an autoPlay
     // attribute: iOS only authorises the element when the call happens inside the
@@ -26,36 +55,74 @@ function App() {
         videoRef.current?.play().catch(onBlocked);
     };
 
+    const start = () => {
+        // Unlock the bed on the same gesture, for the same per-element reason.
+        // Starting and immediately pausing is enough to authorise it; the board
+        // is still two clips away, so nothing is audible here.
+        const audio = audioRef.current;
+        audio?.play()
+            .then(() => audio.pause())
+            .catch(() => {});
+        enterFullscreen();
+        play();
+        setStarted(true);
+    };
+
+    const onClipEnded = () => {
+        if (node.revealsProp) {
+            const prop = node.revealsProp;
+            setRevealed((r) => (r.includes(prop) ? r : [...r, prop]));
+        }
+        setLastClip(nodeId);
+        setNodeId(step(nodeId));
+    };
+
     return (
         <>
-            {/* mounted for the whole session, hidden while a board is up */}
+            {/* both mounted for the whole session, see the comments in each */}
             <Player
                 ref={videoRef}
                 src={node.type === "clip" ? node.src : undefined}
                 visible={started && node.type === "clip"}
-                onEnded={() => setNodeId(step(nodeId))}
+                onEnded={onClipEnded}
                 onBlocked={onBlocked}
+            />
+            <Ambience
+                ref={audioRef}
+                src={voiceOver}
+                playing={started && node.type === "board"}
             />
 
             {!started && (
                 <div className="screen">
                     <h1>A Crime No One Saw Coming</h1>
-                    <button
-                        className="solve"
-                        onClick={() => {
-                            play();
-                            setStarted(true);
-                        }}
-                    >
+                    <button className="solve" onClick={start}>
                         Start
                     </button>
                 </div>
+            )}
+
+            {/* Dev only: the clips run up to five minutes, so walking a path by
+                hand is otherwise unbearable. Deliberately routed through
+                onClipEnded rather than step() - a skip has to reveal props and
+                arm the voice over exactly like a clip that ran out, or testing
+                would prove nothing about the real playthrough. */}
+            {import.meta.env.DEV && started && node.type === "clip" && (
+                <button
+                    type="button"
+                    className="dev-skip"
+                    onClick={onClipEnded}
+                    title="nur im Dev-Build"
+                >
+                    Skip ▸ {nodeId}
+                </button>
             )}
 
             {started && node.type === "board" && (
                 <Board
                     attributes={graph.attributes}
                     auto={boardVisited ? undefined : node.firstVisitAuto}
+                    revealed={revealed}
                     onSubmit={(sel) => {
                         setBoardVisited(true);
                         setNodeId(step(nodeId, sel));
@@ -78,6 +145,11 @@ function App() {
                     </button>
                 </div>
             )}
+
+            {/* CSS decides when this shows: portrait on a touch device */}
+            <div className="rotate-hint">
+                <p>Bitte das Gerät drehen.</p>
+            </div>
         </>
     );
 }
