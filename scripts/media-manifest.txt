@@ -1,0 +1,37 @@
+# Maps the film team's delivery onto the ids the story graph expects.
+# Format: source (relative to $MEDIA_SRC) | output (relative to frontend/public/)
+#
+# Clip ids read OS_<ort>_<zeit>_<mordwaffe>_<motiv>, following the BeatBoard.
+# Voice overs are named after the clip they follow: the board plays
+# audio/vo-after-<clip>.mp3 when it is entered from that clip, else vo-baseline.
+
+02_Export_20260905/exp2_Szene 01_Opening_REC709_Bineural.mp4|clips/intro.mp4
+
+# Wald
+02_Export_20260905/exp2_Sequenz 01_1_2_A_3_REC709_Bineural.mp4|clips/OS_1_2_A_3.mp4
+02_Export_20260905/exp2_Sequenz 02_1_2_A_12_REC709_Bineural.mp4|clips/OS_1_2_A_12.mp4
+02_Export_20260905/exp2_Szene 08_1_1_A_A_REC709_Bineural.mp4|clips/OS_1_1_A_A.mp4
+
+# Haus des Opfers. Szene 12 is the single dead end the BeatBoard funnels all
+# three "DEAD END Haus" beats into, so several edges point at this one clip.
+02_Export_20260905/exp2_Sequenz 05_2_2_1_A_REC709_Bineural.mp4|clips/OS_2_2_1_A.mp4
+02_Export_20260905/exp2_Szene 12_2_2_23_A_REC709_Bineural.mp4|clips/OS_2_2_23_A.mp4
+02_Export_20260905/exp2_Sequenz 04_2_1_1_A_REC709_Bineural.mp4|clips/OS_2_1_1_A.mp4
+02_Export_20260905/exp2_Sequenz 03_2_1_3_3 _REC709_Bineural.mp4|clips/OS_2_1_3_3.mp4
+
+# Gertruden-Linde. Szene 18 ships as a DAY/NIGHT pair; the BeatBoard drew only
+# one shared dead end, so NIGHT covers every "DEAD END Lindenbaum" after dark.
+02_Export_20260905/exp2_Szene_18_3_1_A_A DAY_REC709_Bineural.mp4|clips/OS_3_1_A_A.mp4
+02_Export_20260905/exp2_Szene 18_3_2_A_A NIGHT_REC709_Bineural.mp4|clips/OS_3_2_A_A.mp4
+02_Export_20260905/exp2_Szene 16_3_2_1_3 _REC709_Bineural.mp4|clips/OS_3_2_1_3.mp4
+02_Export_20260905/exp2_Szene 19_3_2_3_3_REC709_Bineural.mp4|clips/OS_3_2_3_3.mp4
+02_Export_20260905/exp2_Szene 21_3_2_3_2_REC709_Bineural.mp4|clips/OS_3_2_3_2.mp4
+02_Export_20260905/exp2_Szene 22_3_2_2_A_REC709_Bineural.mp4|clips/OS_3_2_2_A.mp4
+
+# Voice overs
+01_Voice_Overs/VO_Baseline_Stereo.mp3|audio/vo-baseline.mp3
+01_Voice_Overs/VO_S2_GUI_Nach_S01_Stereo.mp3|audio/vo-after-intro.mp3
+01_Voice_Overs/VO_S5_GUI_Nach_OS_1_2_A_12_Stereo.mp3|audio/vo-after-OS_1_2_A_12.mp3
+01_Voice_Overs/VO_S13_GUI_NACH_OS_2_2_23_A_Stereo.mp3|audio/vo-after-OS_2_2_23_A.mp3
+01_Voice_Overs/VO_S17_GUI_Nach_OS_3_2_1_3_Stereo.mp3|audio/vo-after-OS_3_2_1_3.mp3
+01_Voice_Overs/VO_S20_GUI_Nach_OS_3_2_3_3_Stereo.mp3|audio/vo-after-OS_3_2_3_3.mp3
