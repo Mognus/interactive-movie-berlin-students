@@ -19,7 +19,11 @@
     position: relative;
     isolation: isolate;
     aspect-ratio: 1600 / 1200;
+    /* dvh, not vh: on mobile vh counts the area under the collapsing browser
+       chrome, so the stage was sized against a viewport taller than the visible
+       one and the bottom row of notes ended up off screen */
     width: min(100vw, calc(100vh * 4 / 3));
+    width: min(100vw, calc(100dvh * 4 / 3));
     container-type: inline-size;
 }
 
@@ -37,6 +41,23 @@
 .board-prop {
     object-fit: cover;
     box-shadow: 0 3px 7px rgba(30, 18, 6, 0.45);
+}
+
+/* Story reveals appear on a board the player has already seen, so they fade in
+   rather than simply being there - otherwise the change is easy to miss.
+   Opacity only: propStyle sets transform inline, and animating that would need
+   the per-prop rotation baked into the keyframe. */
+.board-prop--revealed {
+    animation: prop-fade-in 420ms ease-out both;
+}
+
+@keyframes prop-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 /* no box-shadow here: the card artwork has its own baked in, and the PNG is
@@ -262,7 +283,8 @@
     }
 
     .twine-base,
-    .twine-stripe {
+    .twine-stripe,
+    .board-prop--revealed {
         animation: none;
     }
 

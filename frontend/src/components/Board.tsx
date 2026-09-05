@@ -14,6 +14,7 @@ import {
     NOTES,
     PROPS,
     propStyle,
+    REVEALED_PROPS,
     SOLVE_NOTE,
     spotStyle,
 } from "./board/positions";
@@ -35,10 +36,12 @@ interface BoardProps {
     attributes: Record<AttributeKey, string[]>;
     // pre-made selection on the first visit: played back, then submitted automatically
     auto?: string[];
+    // keys of REVEALED_PROPS the story has unlocked so far
+    revealed: string[];
     onSubmit: (sel: Selection) => void;
 }
 
-export function Board({ attributes, auto, onSubmit }: BoardProps) {
+export function Board({ attributes, auto, revealed, onSubmit }: BoardProps) {
     const [sel, setSel] = useState<Partial<Selection>>({});
     const chosen = ATTRIBUTE_KEYS.filter((k) => sel[k]).length;
     const complete = chosen === ATTRIBUTE_KEYS.length;
@@ -100,6 +103,21 @@ export function Board({ attributes, auto, onSubmit }: BoardProps) {
                         style={propStyle(prop)}
                     />
                 ))}
+
+                {/* pinned on by the story rather than part of the set dressing,
+                    so unlike PROPS these carry a description */}
+                {revealed.map((key) => {
+                    const prop = REVEALED_PROPS[key];
+                    return prop ? (
+                        <img
+                            key={key}
+                            className="board-prop board-prop--revealed"
+                            src={prop.src}
+                            alt={prop.alt ?? ""}
+                            style={propStyle(prop)}
+                        />
+                    ) : null;
+                })}
 
                 {CARDS.map((card) => (
                     <img

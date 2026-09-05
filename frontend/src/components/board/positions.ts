@@ -101,6 +101,9 @@ export interface PropLayout {
     w: number;
     h: number;
     rotation: number;
+    // Only set where the picture carries story, not atmosphere - the decorative
+    // props stay hidden from assistive technology.
+    alt?: string;
 }
 
 // Vite resolves these to hashed URLs in /assets, which is what gets them the
@@ -110,10 +113,6 @@ import street2 from "../../assets/props/street-2.webp";
 import portraitSuit from "../../assets/props/portrait-suit.webp";
 import portraitGirl from "../../assets/props/portrait-girl.webp";
 import portraitMan from "../../assets/props/portrait-man.webp";
-
-// The Gertrudenlinde drawing (assets/props/drawing-gertrudenlinde.webp) is the
-// large sheet on the left of the reference board. Parked for now, not deleted -
-// it is wanted again later.
 
 // Pure decoration - never clickable, never part of the engine. Ordered back to front.
 export const PROPS: PropLayout[] = [
@@ -148,6 +147,23 @@ export const CARDS: PropLayout[] = [
     { src: fundortLeiche, x: 1585, y: 55, w: 145, h: 148, rotation: -3 },
     { src: verbindungDmz, x: 35, y: 660, w: 140, h: 141, rotation: -5 },
 ];
+
+import posterGertrudenlinde from "../../assets/props/poster-gertrudenlinde.webp";
+
+// Scenery the story pins on mid-session, keyed by the graph's "revealsProp".
+// The Gertrudenlinde drawing goes where it has always belonged: the large blank
+// sheet on the left of the reference photo, which was left empty for it.
+export const REVEALED_PROPS: Record<string, PropLayout> = {
+    "gertrudenlinde-poster": {
+        src: posterGertrudenlinde,
+        x: 300,
+        y: 620,
+        w: 390,
+        h: 550,
+        rotation: -2,
+        alt: "Zeichnung der Gertruden-Linde",
+    },
+};
 
 // Decorative cord between the photos and the clue cards. Deliberately its own
 // pin coordinates instead of anchors on PROPS/CARDS: on the reference board the
