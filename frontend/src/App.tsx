@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import { graph, nodeOf, step } from "./engine/engine";
+import { graph, mediaUrl, nodeOf, step } from "./engine/engine";
 import { Player } from "./components/Player";
 import { Ambience } from "./components/Ambience";
 import { Board } from "./components/Board";
@@ -82,14 +82,18 @@ function App() {
             {/* both mounted for the whole session, see the comments in each */}
             <Player
                 ref={videoRef}
-                src={node.type === "clip" ? node.src : undefined}
+                src={
+                    node.type === "clip" && node.src
+                        ? mediaUrl(node.src)
+                        : undefined
+                }
                 visible={started && node.type === "clip"}
                 onEnded={onClipEnded}
                 onBlocked={onBlocked}
             />
             <Ambience
                 ref={audioRef}
-                src={voiceOver}
+                src={mediaUrl(voiceOver)}
                 playing={started && node.type === "board"}
             />
 

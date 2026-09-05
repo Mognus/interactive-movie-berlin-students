@@ -15,6 +15,14 @@ export function nodeOf(id: string): GraphNode {
     return node;
 }
 
+// Clips and voice overs are served immutable for a year (see the Caddyfile) and
+// keep stable file names, so re-cut material would never reach a browser that
+// already holds the old version - no reload gets past an immutable entry, only
+// a different URL does. Bump this whenever the material is replaced.
+export const MEDIA_VERSION = 2;
+
+export const mediaUrl = (src: string) => `${src}?v=${MEDIA_VERSION}`;
+
 // selection object -> ordered 4-slot combo matching the "when" patterns
 const comboOf = (sel: Selection) => ATTRIBUTE_KEYS.map((key) => sel[key]);
 
