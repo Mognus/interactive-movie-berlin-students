@@ -18,6 +18,7 @@ const CONTROLS_IDLE_MS = 2600;
 // only the native video player, and only for the video element itself.
 interface WebkitVideo extends HTMLVideoElement {
     webkitEnterFullscreen?: () => void;
+    webkitExitFullscreen?: () => void;
 }
 
 const pageFullscreenAvailable = () =>
@@ -54,6 +55,18 @@ function enterVideoFullscreen(video: HTMLVideoElement | null) {
     } catch {
         // throws when the metadata is not loaded yet; not worth chasing, the
         // clip plays inline either way
+    }
+}
+
+// iOS keeps its player up after the clip finishes, leaving the audience looking
+// at a spent video with the board hidden behind it and no hint that they are
+// meant to close it by hand. Nothing to do on any other browser.
+function exitVideoFullscreen(video: HTMLVideoElement | null) {
+    const v = video as WebkitVideo | null;
+    try {
+        v?.webkitExitFullscreen?.();
+    } catch {
+        // not in the native player - nothing to leave
     }
 }
 
@@ -133,6 +146,7 @@ function App() {
     };
 
     const onClipEnded = () => {
+        exitVideoFullscreen(videoRef.current);
         if (node.revealsProp) {
             const prop = node.revealsProp;
             setRevealed((r) => (r.includes(prop) ? r : [...r, prop]));

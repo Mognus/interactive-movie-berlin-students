@@ -18,6 +18,11 @@ export interface NoteLayout {
     rotation: number; // degrees, the slight tilt of a hand-pinned note
     pin: string; // pin head color, mixed on the photo
     label: string; // text on the note - may differ from the engine slug
+    // Overrides the shared note size. Only the confirm note uses this: it is
+    // the one note that has to be found rather than read, and at NOTE_W it got
+    // lost among the attribute notes on a phone.
+    w?: number;
+    h?: number;
 }
 
 // Attribute slug -> note. Must cover every value in graph.json.
@@ -84,6 +89,8 @@ export const SOLVE_NOTE: NoteLayout = {
     rotation: -8,
     pin: "#d33a5c",
     label: "Fall lösen",
+    w: 250,
+    h: 235,
 };
 
 // Progress note, on the free cork below the Motiv and Ort columns. Landscape
@@ -165,13 +172,16 @@ import posterGertrudenlinde from "../../assets/props/poster-gertrudenlinde.webp"
 // Scenery the story pins on mid-session, keyed by the graph's "revealsProp".
 // The Gertrudenlinde drawing goes where it has always belonged: the large blank
 // sheet on the left of the reference photo, which was left empty for it.
+// Measured off the reference photo rather than eyeballed: the blank sheet runs
+// y 452-1044 there, and the width follows from the artwork's own 0.709 aspect.
+// The first attempt sat ~130 units too high and read as floating.
 export const REVEALED_PROPS: Record<string, PropLayout> = {
     "gertrudenlinde-poster": {
         src: posterGertrudenlinde,
         x: 300,
-        y: 620,
-        w: 390,
-        h: 550,
+        y: 748,
+        w: 420,
+        h: 592,
         rotation: -2,
         alt: "Zeichnung der Gertruden-Linde",
     },
@@ -235,7 +245,7 @@ const placeStyle = (
 });
 
 export const spotStyle = (n: NoteLayout) =>
-    placeStyle(n.x, n.y, NOTE_W, NOTE_H, n.rotation);
+    placeStyle(n.x, n.y, n.w ?? NOTE_W, n.h ?? NOTE_H, n.rotation);
 
 export const counterStyle = () =>
     placeStyle(
