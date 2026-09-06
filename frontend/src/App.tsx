@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { graph, mediaUrl, nodeOf, step } from "./engine/engine";
 import { Player } from "./components/Player";
 import { Ambience } from "./components/Ambience";
@@ -8,10 +8,11 @@ import "./App.css";
 // Bed for every board that follows a clip without its own narration.
 const BASELINE_VOICE_OVER = "/audio/vo-baseline.mp3";
 
-// Testing aids: always on while developing, and switchable into a real build
-// through VITE_DEV_TOOLS so the team can walk the story on the server without
-// waiting out every clip. Off by default - the audience must not get these.
-const DEV_TOOLS = import.meta.env.DEV || import.meta.env.VITE_DEV_TOOLS === "1";
+// How long the skip button stays up after the last sign of life. It behaves
+// like a video player's controls: briefly visible when a clip starts so nobody
+// has to guess it exists, then out of the way until the mouse moves or the
+// picture is tapped.
+const CONTROLS_IDLE_MS = 2600;
 
 // Mobile browsers hand the page a viewport that reaches under their own chrome,
 // which is what made the player look mis-scaled. Fullscreen removes the chrome
@@ -43,14 +44,40 @@ function App() {
     // Scenery the story has pinned onto the board, e.g. the Gertrudenlinde
     // drawing the detective turns up in OS_2_2_1_A. Grows, never shrinks.
     const [revealed, setRevealed] = useState<string[]>([]);
+    const [skipVisible, setSkipVisible] = useState(false);
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const audioRef = useRef<HTMLAudioElement>(null);
+    const idleTimer = useRef<number | undefined>(undefined);
     const onBlocked = useCallback(() => setBlocked(true), []);
 
     const node = nodeOf(nodeId);
+    const isClip = node.type === "clip";
     const voiceOver =
         (lastClip && nodeOf(lastClip).voiceOver) || BASELINE_VOICE_OVER;
+
+    useEffect(() => {
+        if (!started || !isClip) return;
+
+        const wake = () => {
+            setSkipVisible(true);
+            clearTimeout(idleTimer.current);
+            idleTimer.current = window.setTimeout(
+                () => setSkipVisible(false),
+                CONTROLS_IDLE_MS,
+            );
+        };
+
+        // shown once as each clip starts, then it gets out of the way
+        wake();
+        window.addEventListener("pointermove", wake);
+        window.addEventListener("pointerdown", wake);
+        return () => {
+            window.removeEventListener("pointermove", wake);
+            window.removeEventListener("pointerdown", wake);
+            clearTimeout(idleTimer.current);
+        };
+    }, [started, isClip, nodeId]);
 
     // play() is called straight out of the click rather than left to an autoPlay
     // attribute: iOS only authorises the element when the call happens inside the
@@ -87,12 +114,8 @@ function App() {
             {/* both mounted for the whole session, see the comments in each */}
             <Player
                 ref={videoRef}
-                src={
-                    node.type === "clip" && node.src
-                        ? mediaUrl(node.src)
-                        : undefined
-                }
-                visible={started && node.type === "clip"}
+                src={isClip && node.src ? mediaUrl(node.src) : undefined}
+                visible={started && isClip}
                 onEnded={onClipEnded}
                 onBlocked={onBlocked}
             />
@@ -111,19 +134,18 @@ function App() {
                 </div>
             )}
 
-            {/* The clips run up to five minutes, so walking a path by hand is
-                otherwise unbearable. Deliberately routed through onClipEnded
-                rather than step() - a skip has to reveal props and arm the
-                voice over exactly like a clip that ran out, or testing would
-                prove nothing about the real playthrough. */}
-            {DEV_TOOLS && started && node.type === "clip" && (
+            {/* Jumping to the end of a clip: a way out of a misclick, and the
+                only bearable way to walk a path while testing, since the clips
+                run up to five minutes. Deliberately routed through onClipEnded
+                rather than step() - a skip has to reveal props and arm the voice
+                over exactly like a clip that ran out. */}
+            {started && isClip && (
                 <button
                     type="button"
-                    className="dev-skip"
+                    className={skipVisible ? "skip is-visible" : "skip"}
                     onClick={onClipEnded}
-                    title="Testhilfe, nur bei aktivierten Dev-Tools sichtbar"
                 >
-                    Skip ▸ {nodeId}
+                    Skip
                 </button>
             )}
 
@@ -142,7 +164,7 @@ function App() {
             {started && node.type === "end" && (
                 <div className="screen">
                     <h1>Ende</h1>
-                    <p>Der Fall ist gelöst.</p>
+                    <p>Du hast den Fall gelöst.</p>
                 </div>
             )}
 

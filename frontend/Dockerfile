@@ -10,13 +10,6 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 COPY . .
-
-# Vite inlines env vars into the bundle at build time, so the flag has to arrive
-# here - setting it on the running container would come far too late. Off unless
-# the build is explicitly told otherwise.
-ARG VITE_DEV_TOOLS=0
-ENV VITE_DEV_TOOLS=$VITE_DEV_TOOLS
-
 RUN pnpm build
 
 # Vite emits plain static files, so the runtime image needs no node and no

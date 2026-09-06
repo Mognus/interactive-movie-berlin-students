@@ -25,12 +25,16 @@
     padding: 1.5rem;
 }
 
-/* --- dev skip ------------------------------------------------------------ */
+/* --- skip button --------------------------------------------------------- */
 
-/* Stripped from the production bundle by the import.meta.env.DEV guard in App,
-   so this only ever paints during `pnpm dev`. Sits below the rotate hint on
-   purpose: a phone in portrait has a bigger problem than skipping a clip. */
-.dev-skip {
+/* Behaves like a video player's controls: App shows it as each clip starts and
+   again on any movement or tap, then hides it. Fading rather than unmounting
+   keeps the transition smooth; pointer-events go with the opacity so an
+   invisible button can never swallow a tap meant for the picture.
+
+   Sits below the rotate hint on purpose: a phone held in portrait has a bigger
+   problem than skipping a clip. */
+.skip {
     position: fixed;
     right: 1rem;
     bottom: 1rem;
@@ -43,10 +47,24 @@
     font: inherit;
     font-size: 0.85rem;
     cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease-out;
 }
 
-.dev-skip:hover {
+.skip.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.skip:hover {
     background: rgba(13, 11, 9, 0.85);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skip {
+        transition: none;
+    }
 }
 
 /* --- rotate hint --------------------------------------------------------- */

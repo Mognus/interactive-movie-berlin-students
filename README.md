@@ -37,23 +37,15 @@ plain HTTP; setting `SITE_ADDRESS` to a domain makes Caddy provision and renew
 the certificate on its own. The domain, the dev port, and the container name
 prefix are configured through a `.env` file, see [`.env.example`](.env.example).
 
-## Testing aids
+## Skipping a clip
 
-A button to skip the running clip appears automatically during `pnpm dev`. The
-clips run up to five minutes, so walking a path without it is slow going. It
-routes through the same code path as a clip that ended on its own, so a skipped
+A skip button sits in the bottom right while a clip runs — a way out of a
+misclick, and the only bearable way to walk a path while testing, since the
+clips run up to five minutes. It appears briefly as each clip starts and
+whenever the mouse moves or the picture is tapped, then fades out again.
+
+It goes through the same code path as a clip that ended on its own, so a skipped
 playthrough reveals props and arms voice overs exactly like the real one.
-
-To keep it in a deployed build — handy while the team is reviewing — set
-`DEV_TOOLS=1` in `.env` and rebuild:
-
-```bash
-docker compose up -d --build
-```
-
-Vite inlines the flag at build time, so a restart alone changes nothing; and
-with it off, the button is not merely hidden but absent from the bundle. Turn it
-off again for anything the audience sees.
 
 ## Test paths
 
