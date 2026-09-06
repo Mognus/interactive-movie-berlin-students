@@ -94,6 +94,86 @@
     }
 }
 
+/* --- start screen -------------------------------------------------------- */
+
+/* Opens on the same cork the investigation runs on, so the way in speaks the
+   board's language instead of being a bare dark page. */
+.start-screen {
+    background-color: #b98d5f;
+    background-image: url("./assets/cork-board.webp");
+    background-repeat: repeat;
+    box-shadow: inset 0 0 22vw rgba(48, 28, 10, 0.45);
+}
+
+.start-title {
+    padding: 0 1rem;
+    color: #f6efe2;
+    font-size: clamp(1.6rem, 5vw, 3.2rem);
+    text-align: center;
+    text-shadow: 0 2px 6px rgba(30, 18, 6, 0.55);
+}
+
+/* A pinned note rather than a button. Deliberately not reusing .zettel from
+   board.css: those sizes are container query units measured against the board
+   stage, and there is no stage on this screen for them to resolve against. */
+.start-note {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(7rem, 22vw, 11rem);
+    /* same proportions as the notes on the board */
+    aspect-ratio: 180 / 170;
+    border: 0;
+    padding: 0.6em 0.4em;
+    background: linear-gradient(158deg, #f5893a 0%, #ea7526 55%, #dd6c22 100%);
+    color: #1c1408;
+    font: inherit;
+    font-size: clamp(1rem, 2.6vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    transform: rotate(-4deg);
+    cursor: pointer;
+    box-shadow:
+        0 0.5rem 1rem rgba(40, 22, 6, 0.42),
+        inset 0 0 1.4rem rgba(255, 255, 255, 0.12);
+    transition:
+        transform 140ms ease-out,
+        filter 140ms ease-out;
+}
+
+.start-note:hover {
+    filter: brightness(1.06);
+    /* the rotation has to be repeated - a bare scale() would drop it */
+    transform: rotate(-4deg) scale(1.03);
+}
+
+.start-note:focus-visible {
+    outline: 0.2rem solid #ffe9a8;
+    outline-offset: 0.3rem;
+}
+
+.start-note-pin {
+    position: absolute;
+    top: 7%;
+    left: 50%;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-left: -0.55rem;
+    border-radius: 50%;
+    background: #d33a5c;
+    box-shadow:
+        0 0.15rem 0.25rem rgba(0, 0, 0, 0.55),
+        inset -0.15rem -0.18rem 0.25rem rgba(0, 0, 0, 0.35),
+        inset 0.15rem 0.18rem 0.2rem rgba(255, 255, 255, 0.6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .start-note {
+        transition: none;
+    }
+}
+
 /* --- centered start / end screens --- */
 .screen {
     height: 100%;

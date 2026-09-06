@@ -14,19 +14,46 @@ const BASELINE_VOICE_OVER = "/audio/vo-baseline.mp3";
 // picture is tapped.
 const CONTROLS_IDLE_MS = 2600;
 
+// iPhone Safari is the odd one out: it has no Element.requestFullscreen at all,
+// only the native video player, and only for the video element itself.
+interface WebkitVideo extends HTMLVideoElement {
+    webkitEnterFullscreen?: () => void;
+}
+
+const pageFullscreenAvailable = () =>
+    typeof document.documentElement.requestFullscreen === "function";
+
 // Mobile browsers hand the page a viewport that reaches under their own chrome,
 // which is what made the player look mis-scaled. Fullscreen removes the chrome
 // outright, and the orientation lock keeps a 16:9 film out of a portrait
-// letterbox. Both are best effort: iPhone Safari offers neither, which is why
-// the CSS fixes have to stand on their own and the rotate hint still exists.
-async function enterFullscreen() {
+// letterbox. Best effort throughout - the CSS fixes stand on their own.
+//
+// Only needed once: this is a single page app, so the browser stays fullscreen
+// across every clip and board for the rest of the session.
+async function enterPageFullscreen() {
     try {
-        await document.documentElement.requestFullscreen?.({
+        await document.documentElement.requestFullscreen({
             navigationUI: "hide",
         });
         await screen.orientation?.lock?.("landscape");
     } catch {
         // refused or unsupported - the layout works without it
+    }
+}
+
+// The iPhone path. Unlike page fullscreen this has to be asked for again per
+// clip, because iOS drops out of the player as soon as a clip ends, and it may
+// only be asked from inside a real user gesture. Both ways into a clip are
+// clicks, so the only one that cannot get it is the clip following the scripted
+// first selection - that one is submitted by a timer.
+function enterVideoFullscreen(video: HTMLVideoElement | null) {
+    const v = video as WebkitVideo | null;
+    if (typeof v?.webkitEnterFullscreen !== "function") return;
+    try {
+        v.webkitEnterFullscreen();
+    } catch {
+        // throws when the metadata is not loaded yet; not worth chasing, the
+        // clip plays inline either way
     }
 }
 
@@ -95,7 +122,8 @@ function App() {
         audio?.play()
             .then(() => audio.pause())
             .catch(() => {});
-        enterFullscreen();
+        if (pageFullscreenAvailable()) enterPageFullscreen();
+        else enterVideoFullscreen(videoRef.current);
         play();
         setStarted(true);
     };
@@ -126,10 +154,15 @@ function App() {
             />
 
             {!started && (
-                <div className="screen">
-                    <h1>A Crime No One Saw Coming</h1>
-                    <button className="solve" onClick={start}>
-                        Start
+                <div className="screen start-screen">
+                    <h1 className="start-title">A Crime No One Saw Coming</h1>
+                    <button
+                        type="button"
+                        className="start-note"
+                        onClick={start}
+                    >
+                        <span className="start-note-pin" />
+                        <span>Start</span>
                     </button>
                 </div>
             )}
@@ -156,6 +189,10 @@ function App() {
                     revealed={revealed}
                     onSubmit={(sel) => {
                         setBoardVisited(true);
+                        // still inside the click, which is exactly what iOS
+                        // requires to reopen its player for the next clip
+                        if (!pageFullscreenAvailable())
+                            enterVideoFullscreen(videoRef.current);
                         setNodeId(step(nodeId, sel));
                     }}
                 />
