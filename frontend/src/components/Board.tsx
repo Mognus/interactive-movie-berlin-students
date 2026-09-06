@@ -28,9 +28,16 @@ const GROUP_LABELS: Record<AttributeKey, string> = {
 };
 
 // Scripted first-visit beat: the picks land one by one so the twine visibly grows,
-// left to right. The submit time is unchanged from the original placeholder board.
-const AUTO_PICK_MS = [900, 1250, 1600, 1950];
-const AUTO_SUBMIT_MS = 2600;
+// left to right.
+//
+// Paced against the voice over rather than by feel. The narration in
+// vo-after-intro.mp3 runs 0:00-0:11 (measured by differencing it against
+// vo-baseline.mp3, after which the two files are identical), so submitting
+// earlier cuts the speaker off mid-sentence. The last pick lands well inside
+// that window and the submit follows once the voice is done, which also leaves
+// a moment to take the finished board in.
+const AUTO_PICK_MS = [2500, 4500, 6500, 8500];
+const AUTO_SUBMIT_MS = 12000;
 
 interface BoardProps {
     attributes: Record<AttributeKey, string[]>;
