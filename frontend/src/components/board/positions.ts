@@ -173,14 +173,15 @@ import posterGertrudenlinde from "../../assets/props/poster-gertrudenlinde.webp"
 // The Gertrudenlinde drawing goes where it has always belonged: the large blank
 // sheet on the left of the reference photo, which was left empty for it.
 // Measured off the reference photo rather than eyeballed: the blank sheet runs
-// y 452-1044 there, and the width follows from the artwork's own 0.709 aspect.
-// The first attempt sat ~130 units too high and read as floating.
+// y 452-1044 there, and the width follows from the artwork's own 0.725 aspect.
+// NOTE: w/h have to keep that aspect - .board-prop is object-fit: cover, so a
+// mismatch silently crops the drawing instead of letterboxing it.
 export const REVEALED_PROPS: Record<string, PropLayout> = {
     "gertrudenlinde-poster": {
         src: posterGertrudenlinde,
         x: 300,
         y: 748,
-        w: 420,
+        w: 429,
         h: 592,
         rotation: -2,
         alt: "Zeichnung der Gertruden-Linde",
