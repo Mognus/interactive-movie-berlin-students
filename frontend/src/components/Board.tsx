@@ -9,6 +9,8 @@ import { Twine } from "./board/Twine";
 import {
     anchorOf,
     CARDS,
+    COUNTER_NOTE,
+    counterStyle,
     DECOR_STRANDS,
     HEADERS,
     NOTES,
@@ -45,10 +47,18 @@ interface BoardProps {
     auto?: string[];
     // keys of REVEALED_PROPS the story has unlocked so far
     revealed: string[];
+    // clips watched so far; shown as a count, never as a fraction of the total
+    seenCount: number;
     onSubmit: (sel: Selection) => void;
 }
 
-export function Board({ attributes, auto, revealed, onSubmit }: BoardProps) {
+export function Board({
+    attributes,
+    auto,
+    revealed,
+    seenCount,
+    onSubmit,
+}: BoardProps) {
     const [sel, setSel] = useState<Partial<Selection>>({});
     const chosen = ATTRIBUTE_KEYS.filter((k) => sel[k]).length;
     const complete = chosen === ATTRIBUTE_KEYS.length;
@@ -149,6 +159,19 @@ export function Board({ attributes, auto, revealed, onSubmit }: BoardProps) {
                 {HEADERS.map((header) => (
                     <ZettelStatic key={header.label} note={header} />
                 ))}
+
+                {/* Pinned to the cork rather than floated over it, so it reads
+                    as the detective's own tally. No total on purpose - knowing
+                    how many scenes exist turns investigating into ticking off. */}
+                <div className="zettel counter-note" style={counterStyle()}>
+                    <span
+                        className="zettel-pin"
+                        style={{ background: COUNTER_NOTE.pin }}
+                    />
+                    <span className="zettel-label" aria-live="polite">
+                        Überprüfte Pfade: {seenCount}
+                    </span>
+                </div>
 
                 <Twine points={points} />
 

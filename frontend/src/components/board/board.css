@@ -264,6 +264,21 @@
     color: #8f1d21;
 }
 
+/* --- progress note ------------------------------------------------------ */
+
+/* Cream paper like the confirm note, and a step smaller than the attribute
+   notes: it carries a line of text rather than a single word. Not a button,
+   so it takes neither the pointer cursor nor any click. */
+.counter-note {
+    background: linear-gradient(158deg, #f0e9d8 0%, #e4dcc7 100%);
+    color: #3a2a12;
+    font-size: 1.25cqw;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: default;
+    pointer-events: none;
+}
+
 /* --- utilities --------------------------------------------------------- */
 
 .sr-only {

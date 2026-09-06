@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { COUNTABLE_CLIPS, graph, mediaUrl, nodeOf, step } from "./engine/engine";
+import { graph, mediaUrl, nodeOf, step } from "./engine/engine";
 import { Player } from "./components/Player";
 import { Ambience } from "./components/Ambience";
 import { Board } from "./components/Board";
@@ -193,6 +193,7 @@ function App() {
                     attributes={graph.attributes}
                     auto={boardVisited ? undefined : node.firstVisitAuto}
                     revealed={revealed}
+                    seenCount={seenClips.length}
                     onSubmit={(sel) => {
                         setBoardVisited(true);
                         // still inside the click, which is exactly what iOS
@@ -208,15 +209,8 @@ function App() {
                 <div className="screen">
                     <h1>Ende</h1>
                     <p>Du hast den Fall gelöst.</p>
+                    <p>Überprüfte Pfade: {seenClips.length}</p>
                 </div>
-            )}
-
-            {/* Kept off the cork itself: the board is already dense, and a
-                fixed corner reads the same on the end screen. */}
-            {started && (node.type === "board" || node.type === "end") && (
-                <p className="seen-counter" aria-live="polite">
-                    {seenClips.length} von {COUNTABLE_CLIPS} Szenen gesehen
-                </p>
             )}
 
             {blocked && (

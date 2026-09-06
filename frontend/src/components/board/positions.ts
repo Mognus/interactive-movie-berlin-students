@@ -86,6 +86,18 @@ export const SOLVE_NOTE: NoteLayout = {
     label: "Fall lösen",
 };
 
+// Progress note, on the free cork below the Motiv and Ort columns. Landscape
+// and its own size rather than NOTE_W/NOTE_H: it carries a line of text, not a
+// single word, and the strip left under those columns is wider than it is tall.
+export const COUNTER_NOTE = {
+    x: 880,
+    y: 1110,
+    w: 240,
+    h: 120,
+    rotation: -3,
+    pin: "#2f6fbf",
+};
+
 // The twine hangs from the pin, not from the middle of the note.
 export const anchorOf = (n: NoteLayout) => ({ x: n.x, y: n.y - NOTE_H * 0.35 });
 
@@ -224,6 +236,15 @@ const placeStyle = (
 
 export const spotStyle = (n: NoteLayout) =>
     placeStyle(n.x, n.y, NOTE_W, NOTE_H, n.rotation);
+
+export const counterStyle = () =>
+    placeStyle(
+        COUNTER_NOTE.x,
+        COUNTER_NOTE.y,
+        COUNTER_NOTE.w,
+        COUNTER_NOTE.h,
+        COUNTER_NOTE.rotation,
+    );
 
 export const propStyle = (p: PropLayout) =>
     placeStyle(p.x, p.y, p.w, p.h, p.rotation);

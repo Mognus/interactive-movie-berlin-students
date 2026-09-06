@@ -67,24 +67,6 @@
     }
 }
 
-/* --- progress counter ---------------------------------------------------- */
-
-/* Same visual weight as the skip button so the two read as one layer of
-   chrome over the film, rather than as part of the set. */
-.seen-counter {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    z-index: 5;
-    padding: 0.4rem 0.8rem;
-    border-radius: 3px;
-    background: rgba(13, 11, 9, 0.55);
-    color: rgba(243, 236, 224, 0.85);
-    font-size: 0.8rem;
-    letter-spacing: 0.02em;
-    pointer-events: none;
-}
-
 /* --- rotate hint --------------------------------------------------------- */
 
 /* Both the film and the 4:3 board are landscape, so a portrait phone squeezes

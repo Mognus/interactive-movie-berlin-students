@@ -23,15 +23,6 @@ export const MEDIA_VERSION = 2;
 
 export const mediaUrl = (src: string) => `${src}?v=${MEDIA_VERSION}`;
 
-// What the progress counter measures against: every clip except the opening.
-// There are no true dead ends in this story - everything leads back to the
-// board apart from the solution - so "how far have I got" is best answered by
-// how much of the material has been seen. Derived rather than hardcoded, so
-// adding a scene to the graph moves the total on its own.
-export const COUNTABLE_CLIPS = Object.entries(graph.nodes).filter(
-    ([id, node]) => node.type === "clip" && id !== graph.start,
-).length;
-
 // selection object -> ordered 4-slot combo matching the "when" patterns
 const comboOf = (sel: Selection) => ATTRIBUTE_KEYS.map((key) => sel[key]);
 
