@@ -176,20 +176,26 @@ export const DECOR_STRANDS: {
     y: number;
     pin?: string;
 }[][] = [
+    // NOTE: every strand has to end on a pin, inside the stage. These used to
+    // run off past the board edge on the idea that the cork continues beyond
+    // the crop - but the cork background fills the whole viewport while the
+    // stage does not, so on a wide screen the twine visibly stopped in the
+    // middle of open cork with nothing holding it.
+
     // the long run: "ermordet" up to the small portrait, on to the girl, then
-    // off the board - the loose end implies the rest of the investigation
+    // over to the top right corner
     [
         { key: "long-ermordet", x: 1391, y: 935, pin: "#e8c33a" },
         { key: "long-suit", x: 566, y: 62, pin: "#e8c33a" },
         { key: "long-girl", x: 1070, y: 40, pin: "#d33a5c" },
-        { key: "long-away", x: 1640, y: -80 },
+        { key: "long-corner", x: 1556, y: 38, pin: "#e8c33a" },
     ],
-    // down the left edge: the portrait to the small picture below it, then off
-    // the board - the visible cork is only a crop of the real one
+    // down the left edge: the portrait to the small picture below it, then
+    // down to the lower left
     [
         { key: "left-man", x: 250, y: 120, pin: "#f2ece0" },
         { key: "left-street", x: 48, y: 342, pin: "#2f6fbf" },
-        { key: "left-away", x: -170, y: 560 },
+        { key: "left-low", x: 30, y: 706, pin: "#d33a5c" },
     ],
     // between the date card and Otto Schulz
     [
