@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { graph, mediaUrl, nodeOf, step } from "./engine/engine";
+import { COUNTABLE_CLIPS, graph, mediaUrl, nodeOf, step } from "./engine/engine";
 import { Player } from "./components/Player";
 import { Ambience } from "./components/Ambience";
 import { Board } from "./components/Board";
@@ -72,6 +72,10 @@ function App() {
     // drawing the detective turns up in OS_2_2_1_A. Grows, never shrinks.
     const [revealed, setRevealed] = useState<string[]>([]);
     const [skipVisible, setSkipVisible] = useState(false);
+    // Clips the audience has reached the end of, opening excluded. A skipped
+    // clip counts: skipping is a deliberate choice, and a counter that quietly
+    // refused to move would read as broken rather than as strict.
+    const [seenClips, setSeenClips] = useState<string[]>([]);
 
     const videoRef = useRef<HTMLVideoElement>(null);
     const audioRef = useRef<HTMLAudioElement>(null);
@@ -133,6 +137,8 @@ function App() {
             const prop = node.revealsProp;
             setRevealed((r) => (r.includes(prop) ? r : [...r, prop]));
         }
+        if (nodeId !== graph.start)
+            setSeenClips((s) => (s.includes(nodeId) ? s : [...s, nodeId]));
         setLastClip(nodeId);
         setNodeId(step(nodeId));
     };
@@ -203,6 +209,14 @@ function App() {
                     <h1>Ende</h1>
                     <p>Du hast den Fall gelöst.</p>
                 </div>
+            )}
+
+            {/* Kept off the cork itself: the board is already dense, and a
+                fixed corner reads the same on the end screen. */}
+            {started && (node.type === "board" || node.type === "end") && (
+                <p className="seen-counter" aria-live="polite">
+                    {seenClips.length} von {COUNTABLE_CLIPS} Szenen gesehen
+                </p>
             )}
 
             {blocked && (
