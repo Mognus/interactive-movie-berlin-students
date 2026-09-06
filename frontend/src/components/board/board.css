@@ -46,7 +46,11 @@
 /* Story reveals appear on a board the player has already seen, so they fade in
    rather than simply being there - otherwise the change is easy to miss.
    Opacity only: propStyle sets transform inline, and animating that would need
-   the per-prop rotation baked into the keyframe. */
+   the per-prop rotation baked into the keyframe.
+
+   Carries board-card, not board-prop: the artwork is a cut-out with its own
+   shadow baked in, so board-prop's box-shadow would draw a straight dark band
+   along the bounding rectangle where the paper edge runs at an angle. */
 .board-prop--revealed {
     animation: prop-fade-in 420ms ease-out both;
 }

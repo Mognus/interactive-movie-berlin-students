@@ -109,7 +109,25 @@ export function Board({
     return (
         <div className="board-screen">
             <div className="board-stage" aria-busy={!!auto}>
-                {/* scenery first: it sits behind the twine and the notes */}
+                {/* Story reveals go behind everything else: the drawing is a
+                    large sheet the photos are pinned over, exactly as on the
+                    reference board. board-card rather than board-prop on
+                    purpose - it is a cut-out, and board-prop's box-shadow
+                    would trace its bounding rectangle instead of the paper. */}
+                {revealed.map((key) => {
+                    const prop = REVEALED_PROPS[key];
+                    return prop ? (
+                        <img
+                            key={key}
+                            className="board-card board-prop--revealed"
+                            src={prop.src}
+                            alt={prop.alt ?? ""}
+                            style={propStyle(prop)}
+                        />
+                    ) : null;
+                })}
+
+                {/* scenery next: it sits behind the twine and the notes */}
                 {PROPS.map((prop) => (
                     <img
                         key={prop.src}
@@ -120,21 +138,6 @@ export function Board({
                         style={propStyle(prop)}
                     />
                 ))}
-
-                {/* pinned on by the story rather than part of the set dressing,
-                    so unlike PROPS these carry a description */}
-                {revealed.map((key) => {
-                    const prop = REVEALED_PROPS[key];
-                    return prop ? (
-                        <img
-                            key={key}
-                            className="board-prop board-prop--revealed"
-                            src={prop.src}
-                            alt={prop.alt ?? ""}
-                            style={propStyle(prop)}
-                        />
-                    ) : null;
-                })}
 
                 {CARDS.map((card) => (
                     <img
